@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="Galaxy\GameBundle\Entity\Flipper" exclusion-policy="none" >
+        <property name="maxJump" serialized-name="maxJump"/>
+        <property name="impossibleJumpHint" serialized-name="impossibleJumpHint"/>
+        <property name="costJump" serialized-name="costJump"/>
+        <property name="paymentFromDeposit" serialized-name="paymentFromDeposit"/>
+    </class>
+</serializer>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Galaxy\GameBundle\Entity\Flipper" table="galaxy_flipper">
+    <id name="id" type="integer" column="id">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="title" type="text" column="title" nullable="true"/>
+    <field name="maxJump" type="integer" column="max_jump" nullable="true"/>
+    <field name="costJump" type="integer" column="cost_jump" nullable="true"/>
+    <field name="impossibleJumpHint" type="text" column="impossible_jump_hint" nullable="true"/>
+    <field name="paymentFromDeposit" type="boolean" column="payment_from_deposit" nullable="true"/>
+  </entity>
+</doctrine-mapping>
