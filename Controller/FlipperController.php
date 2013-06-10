@@ -12,9 +12,9 @@ class FlipperController extends FOSRestController
 {
    public function getFlipperAction($id){
         $repo = $this->getFlipperRepo();
-        $register = $repo->find($id);
+        $flipper = $repo->find($id);
         
-        $view = $this->view($register);
+        $view = $this->view($flipper);
         return $this->handleView($view);
     }
     
@@ -36,7 +36,7 @@ class FlipperController extends FOSRestController
         return $this->handleView($view);
     }
 
-        /**
+     /**
      * 
      * @return \Doctrine\ORM\EntityRepository
      */

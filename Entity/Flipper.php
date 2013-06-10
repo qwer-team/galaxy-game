@@ -84,7 +84,7 @@ class Flipper
 
     public function setPaymentFromDeposit($paymentFromDeposit)
     {
-        $this->paymentFromDeposit = false;//$paymentFromDeposit;
+        $this->paymentFromDeposit = $paymentFromDeposit;
     }
 
 
