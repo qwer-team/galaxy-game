@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="Galaxy\GameBundle\Entity\UserInfo" exclusion-policy="none" >
+        <property name="userId" serialized-name="userId"/>
+        <property name="totalJumps" serialized-name="totalJumps"/>
+        <property name="superJumps" serialized-name="superJumps"/>
+    </class>
+</serializer>
