@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Jump
 {
+
     /**
      * @var integer
      */
@@ -38,7 +39,6 @@ class Jump
      * @var integer
      */
     private $userId;
-
 
     /**
      * Get id
@@ -164,4 +164,14 @@ class Jump
     {
         return $this->userId;
     }
+
+    public function getCoordinates()
+    {
+        return array(
+            $this->x,
+            $this->y,
+            $this->z,
+        );
+    }
+
 }

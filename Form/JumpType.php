@@ -15,7 +15,7 @@ class JumpType extends AbstractType
                 ->add('x', 'integer')
                 ->add('y', 'integer')
                 ->add('z', 'integer')
-                ->add('superjump', 'checkbox', array("required" => false))
+                ->add('superjump',  'integer')
                 ->add('userId', 'integer')
         ;
     }

@@ -5,6 +5,7 @@ namespace Galaxy\GameBundle\Listener;
 use Galaxy\GameBundle\Event\JumpEvent;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Galaxy\GameBundle\Entity\UserInfo;
+use Galaxy\GameBundle\Entity\Jump;
 
 class JumpListener extends ContainerAware
 {
@@ -16,11 +17,12 @@ class JumpListener extends ContainerAware
         $userId = $jump->getUserId();
         $userInfo = $this->getUserInfo($userId);
 
-
+        $userInfo->setNewCoordinates($jump);
         if ($jump->getSuperjump()) {
             $userInfo->subSuperJump();
         }
         $userInfo->addTotalJump();
+
 
         $em = $this->getEntityManager();
 
@@ -30,6 +32,8 @@ class JumpListener extends ContainerAware
         try {
             $em->flush();
             $this->debitFunds($userInfo);
+            $response = $this->spaceJump($jump);
+            $event->setResponse($response);
             $em->getConnection()->commit();
         } catch (\Exception $e) {
             $em->getConnection()->rollback();
@@ -71,8 +75,19 @@ class JumpListener extends ContainerAware
         $url = $this->container->getParameter("documents.debit_funds.url");
 
         $response = json_decode($this->makeRequest($url, $data));
-        
+
         return $response;
+    }
+
+    private function spaceJump(Jump $jump)
+    {
+        $rawUrl = $this->container->getParameter("space.jump_proceed.url");
+        $find = array("{x}", "{y}", "{z}");
+        $replace = $jump->getCoordinates();
+        
+        $url = str_replace($find, $replace, $rawUrl);
+        $result = json_decode($this->makeRequest($url), true);
+        return $result;
     }
 
     private function makeRequest($url, $data = null)

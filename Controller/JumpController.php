@@ -18,13 +18,20 @@ class JumpController extends FOSRestController
         $form = $this->createForm(new JumpType(), $jump);
         $form->bind($request);
 
-        $result = array("result" => "fail valida");
+        $result = array("result" => "fail validate");
+        $params = print_r($request->request->all(),true);
         if ($form->isValid()) {
             $event = new JumpEvent($jump);
             $dispatcher = $this->get("event_dispatcher");
             try {
                 $dispatcher->dispatch("galaxy.game.jump", $event);
-                $result = array("result" => "success");
+                $result = array(
+                    "result" => "success", 
+                    "huhuuhu" => "sdsds",
+                    "response" => $event->getResponse(),
+                    "atata" => $jump->getSuperjump(),
+                    "params" => $params,
+                );
             } catch (\Exception $exception) {
                 $result = array("result" => "failexc");
             }

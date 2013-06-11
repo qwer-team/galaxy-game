@@ -45,7 +45,7 @@ class JumpLimitValidator extends ConstraintValidator
         $dy = $y - $userInfo->getY();
         $dz = $z - $userInfo->getZ();
         $userJump = sqrt(pow($dx, 2) + pow($dy, 2) + pow($dz, 2));
-        if ($flipperMaxJump < $userJump && $userInfo->getSuperJumps() == 0) {
+        if ($flipperMaxJump < $userJump && $userInfo->getSuperJumps() <= 0) {
             $this->context->addViolation($constraint->getMessage());
         }
     }

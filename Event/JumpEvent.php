@@ -6,8 +6,9 @@ use \Symfony\Component\EventDispatcher\Event;
 
 class JumpEvent extends Event
 {
-   
+
     private $jump;
+    private $response;
 
     function __construct($jump)
     {
@@ -26,6 +27,16 @@ class JumpEvent extends Event
     public function setJump($jump)
     {
         $this->jump = $jump;
+    }
+
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    public function setResponse($response)
+    {
+        $this->response = $response;
     }
 
 }

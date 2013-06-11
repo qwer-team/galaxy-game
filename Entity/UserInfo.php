@@ -231,4 +231,16 @@ class UserInfo
         $this->totalJumps++;
     }
 
+    /**
+     * Set x
+     *
+     * @param integer $x, $y, $z
+     * @return UserInfo
+     */
+    public function setNewCoordinates(Jump $jump)
+    {
+        list($this->x, $this->y, $this->z) = $jump->getCoordinates();
+        return $this;
+    }
+
 }

@@ -5,10 +5,11 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     
     <parameters>
-        <parameter key="document.remote_service.class">Galaxy\GameBundle\Service\DocumentsRemoteService</parameter>
+        <parameter key="document.game.remote_service.class">Galaxy\GameBundle\Service\DocumentsRemoteService</parameter>
         <parameter key="documentsurl">gala.my/documents</parameter>
         <parameter key="documents.get_funds.url">%documentsurl%/{userId}/funds.json</parameter>
         <parameter key="documents.debit_funds.url">%documentsurl%/servicesDebit/create/approve.json</parameter>
+        <parameter key="space.jump_proceed.url">http://localhost:8080/gala/jump/proceed/{x}/{y}/{z}</parameter>
     </parameters>
     <services>
         <service id="galaxy.jump_limit.validator" class="Galaxy\GameBundle\Validator\JumpLimitValidator">
@@ -26,7 +27,7 @@
             </call>
             <tag name="validator.constraint_validator" alias="funds_limit" />
         </service>
-        <service id="document.remote_service" class="%document.remote_service.class%">
+        <service id="document.remote_service" class="%document.game.remote_service.class%">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
