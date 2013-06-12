@@ -33,6 +33,8 @@ class JumpListener extends ContainerAware
             $em->flush();
             $this->debitFunds($userInfo);
             $response = $this->spaceJump($jump);
+            $pointTag = $response['type']['tag'];
+            $this->processTypeJump($pointTag, $response, $userId);
             $event->setResponse($response);
             $em->getConnection()->commit();
         } catch (\Exception $e) {
@@ -84,10 +86,20 @@ class JumpListener extends ContainerAware
         $rawUrl = $this->container->getParameter("space.jump_proceed.url");
         $find = array("{x}", "{y}", "{z}");
         $replace = $jump->getCoordinates();
-        
+
         $url = str_replace($find, $replace, $rawUrl);
         $result = json_decode($this->makeRequest($url), true);
+
         return $result;
+    }
+
+    private function processTypeJump($tag, $response, $userId)
+    {
+        $serviceName = "game.process_point_type.$tag";
+        if($this->container->has($serviceName)){
+            $service = $this->container->get($serviceName);
+            $service->proceed($response, $userId);
+        }
     }
 
     private function makeRequest($url, $data = null)

@@ -9,6 +9,7 @@
         <parameter key="documentsurl">gala.my/documents</parameter>
         <parameter key="documents.get_funds.url">%documentsurl%/{userId}/funds.json</parameter>
         <parameter key="documents.debit_funds.url">%documentsurl%/servicesDebit/create/approve.json</parameter>
+        <parameter key="documents.trans_funds.url">%documentsurl%/fundsTransfer/create/approve.json</parameter>
         <parameter key="space.jump_proceed.url">http://localhost:8080/gala/jump/proceed/{x}/{y}/{z}</parameter>
     </parameters>
     <services>
@@ -38,5 +39,26 @@
             </call>
             <tag name="kernel.event_listener" event="galaxy.game.jump" method="onEvent"/>
         </service>
+        
+        <!-- Game point procced-->
+        <service id="game.process_point_type" abstract="true" >
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="game.process_point_type.black" class="Galaxy\GameBundle\Service\PointProcess\BLack" parent="game.process_point_type"/>
+        <service id="game.process_point_type.trap" class="Galaxy\GameBundle\Service\PointProcess\Trap" parent="game.process_point_type" />
+        <service id="game.process_point_type.plus_percent" class="Galaxy\GameBundle\Service\PointProcess\PlusPercent" parent="game.process_point_type" />
+        <service id="game.process_point_type.minus_percent" class="Galaxy\GameBundle\Service\PointProcess\MinusPercent" parent="game.process_point_type" />
+        <service id="game.process_point_type.theft" class="Galaxy\GameBundle\Service\PointProcess\Theft" parent="game.process_point_type" />
+        <service id="game.process_point_type.zero_point" class="Galaxy\GameBundle\Service\PointProcess\ZeroPoint" parent="game.process_point_type" />
+        <service id="game.process_point_type.nil" class="Galaxy\GameBundle\Service\PointProcess\Nil" parent="game.process_point_type" />
+        <service id="game.process_point_type.jump" class="Galaxy\GameBundle\Service\PointProcess\Jump" parent="game.process_point_type" />
+        <service id="game.process_point_type.plus_prize_period" class="Galaxy\GameBundle\Service\PointProcess\PlusPrizePeriod" parent="game.process_point_type" />
+        <service id="game.process_point_type.minus_prize_period" class="Galaxy\GameBundle\Service\PointProcess\MinusPrizePeriod" parent="game.process_point_type" />
+        <service id="game.process_point_type.plus_all_period" class="Galaxy\GameBundle\Service\PointProcess\PlusAllPeriod" parent="game.process_point_type" />
+        <service id="game.process_point_type.minus_all_period" class="Galaxy\GameBundle\Service\PointProcess\MinusAllPeriod" parent="game.process_point_type" />
+        <service id="game.process_point_type.message" class="Galaxy\GameBundle\Service\PointProcess\Message" parent="game.process_point_type" /> 
+        <!-- -->
     </services>
 </container>
