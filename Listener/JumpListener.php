@@ -33,7 +33,7 @@ class JumpListener extends ContainerAware
             $em->flush();
             $this->debitFunds($userInfo);
             $response = $this->spaceJump($jump);
-            $pointTag = $response['type']['tag'];
+            $pointTag = $response["type"]["tag"];
             $this->processTypeJump($pointTag, $response, $userId);
             $event->setResponse($response);
             $em->getConnection()->commit();

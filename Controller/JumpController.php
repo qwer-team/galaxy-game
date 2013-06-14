@@ -27,9 +27,7 @@ class JumpController extends FOSRestController
                 $dispatcher->dispatch("galaxy.game.jump", $event);
                 $result = array(
                     "result" => "success", 
-                    "huhuuhu" => "sdsds",
                     "response" => $event->getResponse(),
-                    "atata" => $jump->getSuperjump(),
                     "params" => $params,
                 );
             } catch (\Exception $exception) {
