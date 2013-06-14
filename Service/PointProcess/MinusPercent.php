@@ -3,15 +3,29 @@
 namespace Galaxy\GameBundle\Service\PointProcess;
 
 use Galaxy\GameBundle\Service\PointProcess\PointTypeProcess;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Galaxy\GameBundle\Service\DocumentsRemoteService;
 
-class MinusPercent extends ContainerAware implements PointTypeProcess
+class MinusPercent implements PointTypeProcess
 {
+
+    private $documentService;
+    private $url;
+
+    public function setDocumentService(DocumentsRemoteService $documentService)
+    {
+        $this->documentService = $documentService;
+    }
+
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
     public function proceed($response, $userId)
     {
         $parameter = $response['subtype']['parameter'];
-        $documentsService = $this->container->get("document.remote_service");
-        $fundsInfo = $documentsService->getFunds($userId);
+        //$documentsService = $this->container->get("document.remote_service");
+        $fundsInfo = $this->documentService->getFunds($userId);
         $cash = $fundsInfo->active;
         $summa1 = $cash * $parameter / 100;
         $data = array(
@@ -19,14 +33,13 @@ class MinusPercent extends ContainerAware implements PointTypeProcess
             'summa1' => $summa1,
             'account' => 1
         );
-        $url = $this->container->getParameter("documents.debit_funds.url");
+       //$url = $this->container->getParameter("documents.debit_funds.url");
 
-        $response = json_decode($this->makeRequest($url, $data));
+        $response = json_decode($this->makeRequest($this->url, $data));
 
         return $response;
     }
-    
-    
+
     private function makeRequest($url, $data = null)
     {
         $curl = curl_init();
@@ -41,4 +54,5 @@ class MinusPercent extends ContainerAware implements PointTypeProcess
 
         return $response;
     }
+
 }
