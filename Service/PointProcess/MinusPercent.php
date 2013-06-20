@@ -39,6 +39,7 @@ class MinusPercent implements PointTypeProcess
 
         return $response;
     }
+    
 
     private function makeRequest($url, $data = null)
     {
