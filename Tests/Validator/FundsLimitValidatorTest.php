@@ -32,9 +32,11 @@ class FundsLimitValidatorTest extends AbstractJumpValidatorTest
     public function dataProvider()
     {
         return array(
+            //paymentFromDeposite, active, deposite, jumpCost, maxJump, count
             array(false, 10, 10, 5, 30, 0),
             array(false, 2, 10, 5, 30, 1),
             array(true, 2, 10, 5, 30, 0),
+            array(true, 40, -10, 10, 5, 1),
         );
     }
 

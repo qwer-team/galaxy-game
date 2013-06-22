@@ -6,6 +6,7 @@ use Galaxy\GameBundle\Event\JumpEvent;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Galaxy\GameBundle\Entity\UserInfo;
 use Galaxy\GameBundle\Entity\Jump;
+use Galaxy\GameBundle\Entity\UserLog;
 
 class JumpListener extends ContainerAware
 {
@@ -34,6 +35,7 @@ class JumpListener extends ContainerAware
             $this->debitFunds($userInfo);
             $response = $this->spaceJump($jump);
             $pointTag = $response["type"]["tag"];
+            $this->logMessage($userId, $response["type"]["message1"]);
             $this->processTypeJump($pointTag, $response, $userId);
             $event->setResponse($response);
             $em->getConnection()->commit();
@@ -41,6 +43,21 @@ class JumpListener extends ContainerAware
             $em->getConnection()->rollback();
             $em->close();
         }
+    }
+
+    private function logMessage($userId, $message)
+    {
+        if($message == ""){
+            return;
+        }
+        
+        $logEntry = new UserLog();
+        $logEntry->setUserId($userId);
+        $logEntry->setText($message);
+        
+        $em = $this->getEntityManager();
+        $em->persist($logEntry);
+        $em->flush();
     }
 
     /**
@@ -96,7 +113,7 @@ class JumpListener extends ContainerAware
     private function processTypeJump($tag, $response, $userId)
     {
         $serviceName = "game.process_point_type.$tag";
-        if($this->container->has($serviceName)){
+        if ($this->container->has($serviceName)) {
             $service = $this->container->get($serviceName);
             $service->proceed($response, $userId);
         }

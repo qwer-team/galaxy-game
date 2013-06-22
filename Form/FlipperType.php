@@ -15,7 +15,7 @@ class FlipperType extends AbstractType
             ->add('maxJump', 'integer')
             ->add('costJump', 'integer')
             ->add('impossibleJumpHint', 'textarea')
-            ->add('paymentFromDeposit', 'checkbox', array("required" => false))
+            ->add('paymentFromDeposit', 'checkbox')//, array("required" => false))
         ;
     }
 
