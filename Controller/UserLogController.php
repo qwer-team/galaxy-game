@@ -24,6 +24,15 @@ class UserLogController extends FOSRestController
         return $this->handleView($view);
     
     }
+    
+    public function getGameLogCountAction($userId)
+    {
+        $repo = $this->getUserLogRepo();
+        $count = count($repo->findByUserId($userId));
+        
+        $view = $this->view(array("count" => $count));
+        return $this->handleView($view);
+    }
 
     /**
      * 
