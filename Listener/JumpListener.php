@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Galaxy\GameBundle\Entity\UserInfo;
 use Galaxy\GameBundle\Entity\Jump;
 use Galaxy\GameBundle\Entity\UserLog;
+use Galaxy\GameBundle\Entity\Basket;
 
 class JumpListener extends ContainerAware
 {
@@ -36,6 +37,9 @@ class JumpListener extends ContainerAware
             $response = $this->spaceJump($jump);
             $pointTag = $response["type"]["tag"];
             $this->logMessage($userId, $response["type"]["message1"]);
+            $this->cleanCapturedPrizes($userId);
+            $this->updateBoughtPrizes($userId);
+            $this->processPrizeJump($response, $jump, $userId);
             $this->processTypeJump($pointTag, $response, $userId);
             $event->setResponse($response);
             $em->getConnection()->commit();
@@ -47,14 +51,14 @@ class JumpListener extends ContainerAware
 
     private function logMessage($userId, $message)
     {
-        if($message == ""){
+        if ($message == "") {
             return;
         }
-        
+
         $logEntry = new UserLog();
         $logEntry->setUserId($userId);
         $logEntry->setText($message);
-        
+
         $em = $this->getEntityManager();
         $em->persist($logEntry);
         $em->flush();
@@ -117,6 +121,88 @@ class JumpListener extends ContainerAware
             $service = $this->container->get($serviceName);
             $service->proceed($response, $userId);
         }
+    }
+
+    private function cleanCapturedPrizes($userId)
+    {
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository("GalaxyGameBundle:Basket");
+        $criteria = array(
+            "userId" => $userId,
+            "bought" => false,
+        );
+
+        $oldPrize = $repo->findOneBy($criteria);
+        if(!$oldPrize){
+            return;
+        }
+        if($oldPrize->getRestore()){
+            $this->restorePrize($oldPrize);
+        }
+        $em->remove($oldPrize);
+        $em->flush();
+    }
+    
+    private function updateBoughtPrizes($userId)
+    {
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository("GalaxyGameBundle:Basket");
+        $criteria = array(
+            "userId" => $userId,
+            "bought" => true,
+        );
+
+        $prizes = $repo->findBy($criteria);
+        if(!count($prizes)){
+            return;
+        }
+        
+        foreach($prizes as $prize){
+            if($prize->getJumpsRemain() == 0){
+                if($prize->getRestore()){
+                    $this->restorePrize($prize);
+                }
+                $em->remove($prize);
+            } else {
+                $prize->subJumpsRemain();
+            }
+        }
+        $em->flush();
+    }
+
+    private function restorePrize(Basket $oldPrize)
+    {
+        $url = $this->container->getParameter("space.restore_prize.url");
+        $data = array(
+            "subelement" => $oldPrize->getSubelementId(),
+            "x" => $oldPrize->getX(),
+            "y" => $oldPrize->getY(),
+            "z" => $oldPrize->getZ(),
+        );
+        
+        $this->makeRequest($url, $data);
+    }
+
+    private function processPrizeJump($response, Jump $jump, $userId)
+    {
+        if ($response['subelement'] == null || $response['element']['blocked']) {
+            return;
+        }
+
+        $subelement = $response['subelement'];
+        $element = $response['element'];
+        $basket = new Basket();
+        $basket->setUserId($userId);
+        $basket->setElementId($element['id']);
+        $basket->setJumpsRemain($element['available']);
+        $basket->setSubelementId($subelement['id']);
+        $basket->setRestore(!$subelement['restore']);
+        $basket->setCoordinates($jump->getCoordinates());
+        
+        $em = $this->getEntityManager();
+        $em->persist($basket);
+
+        $em->flush();
     }
 
     private function makeRequest($url, $data = null)

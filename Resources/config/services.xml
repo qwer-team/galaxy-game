@@ -10,7 +10,9 @@
         <parameter key="documents.get_funds.url">%documentsurl%/{userId}/funds.json</parameter>
         <parameter key="documents.debit_funds.url">%documentsurl%/servicesDebit/create/approve.json</parameter>
         <parameter key="documents.trans_funds.url">%documentsurl%/fundsTransfer/create/approve.json</parameter>
-        <parameter key="space.jump_proceed.url">http://localhost:8080/gala/jump/proceed/{x}/{y}/{z}</parameter>
+        <parameter key="space.url">http://localhost:8080/gala</parameter>
+        <parameter key="space.jump_proceed.url">%space.url%/jump/proceed/{x}/{y}/{z}</parameter>
+        <parameter key="space.restore_prize.url">%space.url%/subelement/restore/</parameter>
         <parameter key="user.lock.days">+{days} days</parameter>
         <parameter key="usersurl">http://demo11.qwer.com.ua</parameter>
         <parameter key="user.frontend.lock">%usersurl%/locks/{userId}/user.json</parameter>
