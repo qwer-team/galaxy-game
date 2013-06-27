@@ -158,13 +158,12 @@ class JumpListener extends ContainerAware
         }
         
         foreach($prizes as $prize){
+            $prize->subJumpsRemain();
             if($prize->getJumpsRemain() == 0){
                 if($prize->getRestore()){
                     $this->restorePrize($prize);
                 }
                 $em->remove($prize);
-            } else {
-                $prize->subJumpsRemain();
             }
         }
         $em->flush();
