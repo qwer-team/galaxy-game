@@ -49,6 +49,12 @@ class UserInfo
      * @var \Galaxy\GameBundle\Entity\Flipper
      */
     private $flipper;
+    
+    /**
+     *
+     * @var Basket 
+     */
+    private $basket;
 
     /**
      * Set userId
@@ -242,5 +248,16 @@ class UserInfo
         list($this->x, $this->y, $this->z) = $jump->getCoordinates();
         return $this;
     }
+
+    public function getBasket()
+    {
+        return $this->basket;
+    }
+
+    public function setBasket($basket)
+    {
+        $this->basket = $basket;
+    }
+
 
 }

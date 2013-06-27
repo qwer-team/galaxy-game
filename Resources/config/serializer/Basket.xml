@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="Galaxy\GameBundle\Entity\Basket" exclusion-policy="none" >
+        <property name="elementId" serialized-name="elementId"/>
+        <property name="subelementId" serialized-name="subelementId"/>
+        <property name="jumpsRemain" serialized-name="jumpsRemain"/>
+    </class>
+</serializer>

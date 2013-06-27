@@ -26,11 +26,6 @@ class Basket
     /**
      * @var integer
      */
-    private $userId;
-
-    /**
-     * @var integer
-     */
     private $subelementId;
 
     /**
@@ -125,29 +120,6 @@ class Basket
     public function getJumpsRemain()
     {
         return $this->jumpsRemain;
-    }
-
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     * @return Basket
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return integer 
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**
@@ -287,4 +259,32 @@ class Basket
         $this->jumpsRemain--;
     }
 
+    /**
+     * @var \Galaxy\GameBundle\Entity\UserInfo
+     */
+    private $userInfo;
+
+
+    /**
+     * Set userInfo
+     *
+     * @param \Galaxy\GameBundle\Entity\UserInfo $userInfo
+     * @return Basket
+     */
+    public function setUserInfo(\Galaxy\GameBundle\Entity\UserInfo $userInfo)
+    {
+        $this->userInfo = $userInfo;
+
+        return $this;
+    }
+
+    /**
+     * Get userInfo
+     *
+     * @return \Galaxy\GameBundle\Entity\UserInfo 
+     */
+    public function getUserInfo()
+    {
+        return $this->userInfo;
+    }
 }

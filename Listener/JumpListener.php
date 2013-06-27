@@ -37,9 +37,9 @@ class JumpListener extends ContainerAware
             $response = $this->spaceJump($jump);
             $pointTag = $response["type"]["tag"];
             $this->logMessage($userId, $response["type"]["message1"]);
-            $this->cleanCapturedPrizes($userId);
-            $this->updateBoughtPrizes($userId);
-            $this->processPrizeJump($response, $jump, $userId);
+            $this->cleanCapturedPrizes($userInfo);
+            $this->updateBoughtPrizes($userInfo);
+            $this->processPrizeJump($response, $jump, $userInfo);
             $this->processTypeJump($pointTag, $response, $userId);
             $event->setResponse($response);
             $em->getConnection()->commit();
@@ -123,12 +123,12 @@ class JumpListener extends ContainerAware
         }
     }
 
-    private function cleanCapturedPrizes($userId)
+    private function cleanCapturedPrizes($userInfo)
     {
         $em = $this->getEntityManager();
         $repo = $em->getRepository("GalaxyGameBundle:Basket");
         $criteria = array(
-            "userId" => $userId,
+            "userInfo" => $userInfo,
             "bought" => false,
         );
 
@@ -143,12 +143,12 @@ class JumpListener extends ContainerAware
         $em->flush();
     }
     
-    private function updateBoughtPrizes($userId)
+    private function updateBoughtPrizes($userInfo)
     {
         $em = $this->getEntityManager();
         $repo = $em->getRepository("GalaxyGameBundle:Basket");
         $criteria = array(
-            "userId" => $userId,
+            "userInfo" => $userInfo,
             "bought" => true,
         );
 
@@ -183,7 +183,7 @@ class JumpListener extends ContainerAware
         $this->makeRequest($url, $data);
     }
 
-    private function processPrizeJump($response, Jump $jump, $userId)
+    private function processPrizeJump($response, Jump $jump, UserInfo $userInfo)
     {
         if ($response['subelement'] == null || $response['element']['blocked']) {
             return;
@@ -192,7 +192,7 @@ class JumpListener extends ContainerAware
         $subelement = $response['subelement'];
         $element = $response['element'];
         $basket = new Basket();
-        $basket->setUserId($userId);
+        $basket->setUserInfo($userInfo);
         $basket->setElementId($element['id']);
         $basket->setJumpsRemain($element['available']);
         $basket->setSubelementId($subelement['id']);

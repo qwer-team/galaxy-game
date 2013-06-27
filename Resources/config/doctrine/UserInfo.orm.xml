@@ -10,6 +10,7 @@
                 <join-column name="flipper_id" referenced-column-name="id"  nullable="false"/>
             </join-columns>
         </many-to-one>
+        <one-to-many target-entity="Basket" mapped-by="userInfo" field="basket" />
         <field name="x" type="integer"/>
         <field name="y" type="integer"/>
         <field name="z" type="integer"/>
