@@ -5,6 +5,7 @@ namespace Galaxy\GameBundle\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Galaxy\GameBundle\Event\BuyElementEvenet;
+use Galaxy\GameBundle\Event\SellElementEvent;
 
 /**
  * Description of BasketController
@@ -42,6 +43,27 @@ class BasketController extends FOSRestController
             );
         } catch (\Exception $exception) {
             $response = array("result" => "fail");
+        }
+
+        $view = $this->view($response);
+        return $this->handleView($view);
+    }
+    
+    public function getElementSellAction($userId, $elementId)
+    {
+        $response = array("result" => 'success');
+
+        $event = new SellElementEvent($userId, $elementId);
+        $dispatcher = $this->get("event_dispatcher");
+
+        try {
+            $dispatcher->dispatch("galaxy.game.sell_element", $event);
+            $response = array(
+                "result" => "success",
+                "elementId" => $event->getResponse(),
+            );
+        } catch (\Exception $exception) {
+            $response = array("result" => "fail", "er" => $exception->getMessage());
         }
 
         $view = $this->view($response);

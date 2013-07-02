@@ -147,6 +147,7 @@ class JumpListener extends ContainerAware
     {
         $em = $this->getEntityManager();
         $repo = $em->getRepository("GalaxyGameBundle:Basket");
+        $spaceService = $this->container->get("space.remote_service");
         $criteria = array(
             "userInfo" => $userInfo,
             "bought" => true,
@@ -161,7 +162,7 @@ class JumpListener extends ContainerAware
             $prize->subJumpsRemain();
             if($prize->getJumpsRemain() == 0){
                 if($prize->getRestore()){
-                    $this->restorePrize($prize);
+                    $spaceService->restorePrize($prize);
                 }
                 $em->remove($prize);
             }
@@ -169,18 +170,7 @@ class JumpListener extends ContainerAware
         $em->flush();
     }
 
-    private function restorePrize(Basket $oldPrize)
-    {
-        $url = $this->container->getParameter("space.restore_prize.url");
-        $data = array(
-            "subelement" => $oldPrize->getSubelementId(),
-            "x" => $oldPrize->getX(),
-            "y" => $oldPrize->getY(),
-            "z" => $oldPrize->getZ(),
-        );
-        
-        $this->makeRequest($url, $data);
-    }
+   
 
     private function processPrizeJump($response, Jump $jump, UserInfo $userInfo)
     {

@@ -18,6 +18,8 @@
         <parameter key="user.lock.days">+{days} days</parameter>
         <parameter key="usersurl">http://demo11.qwer.com.ua</parameter>
         <parameter key="user.frontend.lock">%usersurl%/locks/{userId}/user.json</parameter>
+        <parameter key="space.add_single_subelement.url">%space.url%/subelement/addSingle/</parameter>
+        <parameter key="get.prize_list.url">%space.url%/prize/list/</parameter>
     </parameters>
     <services>
         <service id="galaxy.jump_limit.validator" class="Galaxy\GameBundle\Validator\JumpLimitValidator">
@@ -65,6 +67,24 @@
                 <argument type="string">%documents.debit_funds.url%</argument>
             </call>
             <tag name="kernel.event_listener" event="galaxy.game.buy_element" method="onEvent"/>
+        </service>
+        <service id="galaxy.game.sell_element_listener" class="Galaxy\GameBundle\Listener\SellElementListener">
+            <call method="setEm">
+                <argument type="service" id="doctrine.orm.entity_manager" />
+            </call>
+            <call method="setDocumentsRemote">
+                <argument type="service" id="document.remote_service" />
+            </call>
+            <call method="setSpaceRemote">
+                <argument type="service" id="space.remote_service" />
+            </call>
+            <call method="setTransUrl">
+                <argument type="string">%documents.trans_funds.url%</argument>
+            </call>
+            <call method="setSpaceUrl">
+                <argument type="string">%space.add_single_subelement.url%</argument>
+            </call>
+            <tag name="kernel.event_listener" event="galaxy.game.sell_element" method="onEvent"/>
         </service>
         
         <!-- Game point procced-->
