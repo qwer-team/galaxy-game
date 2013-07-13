@@ -254,32 +254,4 @@ class Question
     {
         return $this->text;
     }
-    /**
-     * @var \DateTime
-     */
-    private $started;
-
-
-    /**
-     * Set started
-     *
-     * @param \DateTime $started
-     * @return Question
-     */
-    public function setStarted($started)
-    {
-        $this->started = $started;
-
-        return $this;
-    }
-
-    /**
-     * Get started
-     *
-     * @return \DateTime 
-     */
-    public function getStarted()
-    {
-        return $this->started;
-    }
 }

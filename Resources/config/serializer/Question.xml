@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="Galaxy\GameBundle\Entity\Question" exclusion-policy="none" >
+        <property name="rightAnswer" serialized-name="rightAnswer"/>
+        <property name="messageId" serialized-name="messageId"/>
+        <property name="jumpsToQuestion" serialized-name="jumpsToQuestion"/>
+        <property name="userInfo" exclude='true'/>
+    </class>
+</serializer>
+

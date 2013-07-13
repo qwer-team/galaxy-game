@@ -20,6 +20,12 @@
         <parameter key="user.frontend.lock">%usersurl%/locks/{userId}/user.json</parameter>
         <parameter key="space.add_single_subelement.url">%space.url%/subelement/addSingle/</parameter>
         <parameter key="get.prize_list.url">%space.url%/prize/list/</parameter>
+        <parameter key="info.url">gala.my/api</parameter>
+        <parameter key="info.find_message.url">%info.url%/find/message.json</parameter>
+        <parameter key="user.url">gala.user.my</parameter>
+        <parameter key="user.get_user.url">%user.url%/users/{userId}/id.json</parameter>
+        <parameter key="frontend.url">gala.user.my</parameter>
+        <parameter key="frontend.reset_question.url">%frontend.url%/reset/{questionId}/{result}</parameter>
     </parameters>
     <services>
         <service id="galaxy.jump_limit.validator" class="Galaxy\GameBundle\Validator\JumpLimitValidator">
@@ -47,7 +53,16 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
-        <service id="info.remote.service" class="Galaxy\GameBundle\Service\InfoRemoteService" />
+        <service id="info.remote.service" class="Galaxy\GameBundle\Service\InfoRemoteService" >
+            <call method="setFindMessageUrl">
+                <argument type="string" >%info.find_message.url%</argument>
+            </call>
+        </service>
+        <service id="user.remote.service" class="Galaxy\GameBundle\Service\UserRemoteService" >
+            <call method="setGetUserUrl">
+                <argument type="string">%user.get_user.url%</argument>
+            </call>
+        </service>
         <service id="galaxy.game.jump_listener" class="Galaxy\GameBundle\Listener\JumpListener">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
@@ -113,7 +128,36 @@
         <service id="game.process_point_type.minus_prize_period" class="Galaxy\GameBundle\Service\PointProcess\MinusPrizePeriod" parent="game.process_point_type" />
         <service id="game.process_point_type.plus_all_period" class="Galaxy\GameBundle\Service\PointProcess\PlusAllPeriod" parent="game.process_point_type" />
         <service id="game.process_point_type.minus_all_period" class="Galaxy\GameBundle\Service\PointProcess\MinusAllPeriod" parent="game.process_point_type" />
-        <service id="game.process_point_type.message" class="Galaxy\GameBundle\Service\PointProcess\Message" parent="game.process_point_type" /> 
+        <service id="game.process_point_type.message" class="Galaxy\GameBundle\Service\PointProcess\Message">
+            <call method="setEntityManager">
+                <argument type="service" id="doctrine.orm.entity_manager"/>
+            </call>
+            <call method="setUserRemoteService">
+                <argument type="service" id="user.remote.service"/>
+            </call>
+            <call method="setInfoRemoteService">
+                <argument type="service" id="info.remote.service"/>
+            </call>
+            <call method="setLogger">
+                <argument type="service" id="logger" />
+            </call>
+        </service> 
+        <service id="question.service" class="Galaxy\GameBundle\Service\QuestionService">
+            <call method="setEntityManager">
+                <argument id="doctrine.orm.entity_manager" type="service"/>
+            </call>      
+            <call method="setInfoRemoteService">
+                <argument id="info.remote.service" type="service"/>
+            </call>  
+            <call method="setFrontendRemoteService">
+                <argument id="frontend.remote.service" type="service" />
+            </call>
+        </service>
+        <service id="frontend.remote.service" class="Galaxy\GameBundle\Service\FrontendRemoteService">
+            <call method="setResetUrl">
+                <argument type="string">%frontend.reset_question.url%</argument>
+            </call>
+        </service>
         <!-- -->
     </services>
 </container>
