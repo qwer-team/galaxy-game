@@ -10,6 +10,7 @@
         <parameter key="documentsurl">http://demo10.qwer.com.ua/documents</parameter>
         <parameter key="documents.get_funds.url">%documentsurl%/{userId}/funds.json</parameter>
         <parameter key="documents.debit_funds.url">%documentsurl%/servicesDebit/create/approve.json</parameter>
+        <parameter key="documents.deposite_funds.url">%documentsurl%/fundsTransfer/create/approve.json</parameter>
         <parameter key="space.element.url">%space.url%/prizeElement/get/</parameter>
         <parameter key="documents.trans_funds.url">%documentsurl%/fundsTransfer/create/approve.json</parameter>
         <parameter key="space.url">http://localhost:8080/gala</parameter>
@@ -22,6 +23,7 @@
         <parameter key="get.prize_list.url">%space.url%/prize/list/</parameter>
         <parameter key="info.url">gala.my/api</parameter>
         <parameter key="info.find_message.url">%info.url%/find/message.json</parameter>
+        <parameter key="info.get_message.url">%info.url%/messages/{id}.json</parameter>
         <parameter key="user.url">gala.user.my</parameter>
         <parameter key="user.get_user.url">%user.url%/users/{userId}/id.json</parameter>
         <parameter key="frontend.url">gala.user.my</parameter>
@@ -56,6 +58,9 @@
         <service id="info.remote.service" class="Galaxy\GameBundle\Service\InfoRemoteService" >
             <call method="setFindMessageUrl">
                 <argument type="string" >%info.find_message.url%</argument>
+            </call>
+            <call method="setGetMessageUrl">
+                <argument type="string" >%info.get_message.url%</argument>
             </call>
         </service>
         <service id="user.remote.service" class="Galaxy\GameBundle\Service\UserRemoteService" >
@@ -151,6 +156,12 @@
             </call>  
             <call method="setFrontendRemoteService">
                 <argument id="frontend.remote.service" type="service" />
+            </call>
+            <call method="setDocumentsRemoteService">
+                <argument id="document.remote_service" type="service" />
+            </call>
+            <call method="setBlackPointProcess">
+                <argument id="game.process_point_type.black" type="service"/>
             </call>
         </service>
         <service id="frontend.remote.service" class="Galaxy\GameBundle\Service\FrontendRemoteService">

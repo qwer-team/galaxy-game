@@ -72,7 +72,7 @@ class QuestionController extends FOSRestController
                 $result = array("result" => "fail");
             }
         } catch (\Exception $e) {
-            $result = array("result" => "exception");
+            $result = array("result" => "exception {$e->getMessage()}");
         }
 
         $view = $this->view($result);

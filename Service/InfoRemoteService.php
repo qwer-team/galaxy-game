@@ -1,6 +1,7 @@
 <?php
 
 namespace Galaxy\GameBundle\Service;
+
 use Qwer\Curl\Curl;
 
 class InfoRemoteService
@@ -11,6 +12,11 @@ class InfoRemoteService
      */
     private $findMessageUrl;
 
+    /**
+     * @var string
+     */
+    private $getMessageUrl;
+
     public function getMessage($data)
     {
         $message = Curl::makeRequest($this->findMessageUrl, $data);
@@ -19,15 +25,20 @@ class InfoRemoteService
 
     public function getQuestion($messageId)
     {
-        $obj = new \stdClass();
-        $obj->seconds = 6;
+        $url = str_replace("{id}", $messageId, $this->getMessageUrl);
+        $message = Curl::makeRequest($url);
 
-        return $obj;
+        return json_decode($message);
     }
-    
+
     public function setFindMessageUrl($findMessageUrl)
     {
         $this->findMessageUrl = $findMessageUrl;
+    }
+
+    public function setGetMessageUrl($getMessageUrl)
+    {
+        $this->getMessageUrl = $getMessageUrl;
     }
 
 }

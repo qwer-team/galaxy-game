@@ -3,6 +3,7 @@
 namespace Galaxy\GameBundle\Service;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Qwer\Curl\Curl;
 
 class DocumentsRemoteService extends ContainerAware
 {
@@ -16,21 +17,37 @@ class DocumentsRemoteService extends ContainerAware
         return $response;
     }
 
-    
+    public function depositeFunds($userId, $summa, $account)
+    {
+        $data = array(
+            'OA1' => $userId,
+            'summa1' => $summa,
+            'account' => $account
+        );
+        $url = $this->container->getParameter("documents.deposite_funds.url");
+
+        $response = json_decode($this->makeRequest($url, $data));
+
+        return $response;
+    }
+
+    public function debitFunds($userId, $summa, $account)
+    {
+        $data = array(
+            'OA1' => $userId,
+            'summa1' => $summa,
+            'account' => $account
+        );
+        $url = $this->container->getParameter("documents.debit_funds.url");
+
+        $response = json_decode($this->makeRequest($url, $data));
+
+        return $response;
+    }
 
     private function makeRequest($url, $data = null)
     {
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        if (!is_null($data)) {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-        }
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        return $response;
+        return Curl::makeRequest($url, $data);
     }
 
 }
