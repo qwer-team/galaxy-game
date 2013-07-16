@@ -57,9 +57,27 @@ class UserInfo
 
     /**
      *
-     * @var Basket 
+     * @var \Doctrine\Common\Collections\ArrayCollection 
      */
     private $basket;
+
+    /**
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection 
+     */
+    private $questions;
+
+    /**
+     *
+     * @var \Galaxy\GameBundle\Entity\Message 
+     */
+    private $message;
+
+    public function __construct()
+    {
+        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->basket = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set userId
@@ -278,5 +296,27 @@ class UserInfo
     {
         $this->basket = $basket;
     }
+
+
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
+
+    public function setQuestions($questions)
+    {
+        $this->questions = $questions;
+    }
+
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    public function setMessage($message)
+    {
+        $this->message = $message;
+    }
+
 
 }

@@ -39,8 +39,11 @@ class JumpListener extends ContainerAware
             $this->logMessage($userId, $response["type"]["message1"]);
             $this->cleanCapturedPrizes($userInfo);
             $this->updateBoughtPrizes($userInfo);
-            $this->processPrizeJump($response, $jump, $userInfo);
+            $this->processMessage($userInfo);
+            $this->processQuestions($userInfo);
             $this->processTypeJump($pointTag, $response, $userId);
+            $this->processPrizeJump($response, $jump, $userInfo);
+            
             $event->setResponse($response);
             $em->getConnection()->commit();
         } catch (\Exception $e) {
@@ -114,6 +117,30 @@ class JumpListener extends ContainerAware
         return $result;
     }
 
+    private function processMessage(UserInfo $userInfo)
+    {
+        $message = $userInfo->getMessage();
+        if ($message) {
+            $userInfo->setMessage(null);
+            $this->getEntityManager()->remove($message);
+        }
+    }
+
+    private function processQuestions(UserInfo $userInfo)
+    {
+        $questions = $userInfo->getQuestions();
+
+        foreach ($questions as $question) {
+            if($question->getStatus() == 1) {
+                $question->subJumpsToQuestion();
+                if($question->getJumpsToQuestion() == 0){
+                    $question->setStatus(2);
+                }
+            }
+        }
+        $this->getEntityManager()->flush();
+    }
+
     private function processTypeJump($tag, $response, $userId)
     {
         $serviceName = "game.process_point_type.$tag";
@@ -133,16 +160,16 @@ class JumpListener extends ContainerAware
         );
 
         $oldPrize = $repo->findOneBy($criteria);
-        if(!$oldPrize){
+        if (!$oldPrize) {
             return;
         }
-        if($oldPrize->getRestore()){
+        if ($oldPrize->getRestore()) {
             $this->restorePrize($oldPrize);
         }
         $em->remove($oldPrize);
         $em->flush();
     }
-    
+
     private function updateBoughtPrizes($userInfo)
     {
         $em = $this->getEntityManager();
@@ -154,14 +181,14 @@ class JumpListener extends ContainerAware
         );
 
         $prizes = $repo->findBy($criteria);
-        if(!count($prizes)){
+        if (!count($prizes)) {
             return;
         }
-        
-        foreach($prizes as $prize){
+
+        foreach ($prizes as $prize) {
             $prize->subJumpsRemain();
-            if($prize->getJumpsRemain() == 0){
-                if($prize->getRestore()){
+            if ($prize->getJumpsRemain() == 0) {
+                if ($prize->getRestore()) {
                     $spaceService->restorePrize($prize);
                 }
                 $em->remove($prize);
@@ -169,8 +196,6 @@ class JumpListener extends ContainerAware
         }
         $em->flush();
     }
-
-   
 
     private function processPrizeJump($response, Jump $jump, UserInfo $userInfo)
     {
@@ -187,7 +212,7 @@ class JumpListener extends ContainerAware
         $basket->setSubelementId($subelement['id']);
         $basket->setRestore(!$subelement['restore']);
         $basket->setCoordinates($jump->getCoordinates());
-        
+
         $em = $this->getEntityManager();
         $em->persist($basket);
 

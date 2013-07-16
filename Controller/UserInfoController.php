@@ -14,6 +14,18 @@ class UserInfoController extends FOSRestController
         $repo = $this->getUserInfoRepo();
         $info = $repo->find($id);
 
+
+        $questions = $info->getQuestions();
+        $availableQuestions = new \Doctrine\Common\Collections\ArrayCollection();
+        $allowedStatus = array(2,3);
+        foreach ($questions as $question) {
+            if (in_array($question->getStatus(), $allowedStatus)) {
+                $question->setRightAnswer(null);
+                $question->setAnswers(null);
+                $availableQuestions->add($question);
+            }
+        }
+        $info->setQuestions($availableQuestions);
         $view = $this->view($info);
         return $this->handleView($view);
     }
@@ -40,6 +52,7 @@ class UserInfoController extends FOSRestController
         $em = $this->getDoctrine()->getEntityManager();
         $repo = $em->getRepository($namespace);
         return $repo;
+
     }
 
     public function getIncreaseMessagesAction($id)
@@ -51,6 +64,7 @@ class UserInfoController extends FOSRestController
         
         $view = $this->view($info);
         return $this->handleView($view);
+
     }
 
 }

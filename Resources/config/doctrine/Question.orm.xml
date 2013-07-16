@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Galaxy\GameBundle\Entity\Question" table="galaxy_game_question">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+        <many-to-one target-entity="UserInfo" field="userInfo">
+            <join-columns>
+                <join-column name="user_info_id" referenced-column-name="id"  nullable="false"/>
+            </join-columns>
+        </many-to-one>
+        <field name="rightAnswer" column="right_answer" type="integer" />
+        <field name="messageId" column="message_id" type="integer" />
+        <field name="text" column="text" type="text" />
+        <field name="seconds" column="seconds" type="integer" />
+        <field name="status" column="status" type="integer" />
+        <field name="answers" column="answers" type="array" />
+        <field name="started" column="started" type="datetime" nullable="true"/>
+        <field name="jumpsToQuestion" column="jumps_to_question" type="integer" />
+    </entity>
+</doctrine-mapping>
