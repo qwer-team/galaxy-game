@@ -4,5 +4,6 @@
         <property name="userId" serialized-name="userId"/>
         <property name="totalJumps" serialized-name="totalJumps"/>
         <property name="superJumps" serialized-name="superJumps"/>
+        <property name="countMessages" serialized-name="countMessages"/>
     </class>
 </serializer>

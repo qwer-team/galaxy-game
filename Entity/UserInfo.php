@@ -43,6 +43,11 @@ class UserInfo
     /**
      * @var integer
      */
+    private $countMessages;
+
+    /**
+     * @var integer
+     */
     private $id;
 
     /**
@@ -118,6 +123,21 @@ class UserInfo
     public function getX()
     {
         return $this->x;
+    }
+
+    public function getCountMessages()
+    {
+        return $this->countMessages;
+    }
+
+    public function setCountMessages($countMessages)
+    {
+        $this->countMessages = $countMessages;
+    }
+    
+    public function increseCountMessages()
+    {
+        $this->countMessages++;
     }
 
     /**
@@ -277,6 +297,7 @@ class UserInfo
         $this->basket = $basket;
     }
 
+
     public function getQuestions()
     {
         return $this->questions;
@@ -296,5 +317,6 @@ class UserInfo
     {
         $this->message = $message;
     }
+
 
 }
