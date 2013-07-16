@@ -13,7 +13,7 @@ class UserInfoController extends FOSRestController
     {
         $repo = $this->getUserInfoRepo();
         $info = $repo->find($id);
-        
+
         $view = $this->view($info);
         return $this->handleView($view);
     }
@@ -27,9 +27,9 @@ class UserInfoController extends FOSRestController
         $namespace = "GalaxyGameBundle:UserInfo";
         $em = $this->getDoctrine()->getEntityManager();
         $repo = $em->getRepository($namespace);
-        return $repo;    
+        return $repo;
     }
-    
+
     /**
      * 
      * @return \Doctrine\ORM\EntityRepository
@@ -39,7 +39,18 @@ class UserInfoController extends FOSRestController
         $namespace = "GalaxyGameBundle:Basket";
         $em = $this->getDoctrine()->getEntityManager();
         $repo = $em->getRepository($namespace);
-        return $repo;    
+        return $repo;
+    }
+
+    public function getIncreaseMessagesAction($id)
+    {
+        $repo = $this->getUserInfoRepo();
+        $info = $repo->find($id);
+        $info->increseCountMessages();
+        $this->getDoctrine()->getEntityManager()->flush();
+        
+        $view = $this->view($info);
+        return $this->handleView($view);
     }
 
 }

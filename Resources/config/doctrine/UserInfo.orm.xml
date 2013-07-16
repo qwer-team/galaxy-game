@@ -16,5 +16,6 @@
         <field name="z" type="integer"/>
         <field name="totalJumps" type="integer"/>
         <field name="superJumps" type="integer"/>
+        <field name="countMessages" type="integer"/>
     </entity>
 </doctrine-mapping>

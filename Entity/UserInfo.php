@@ -43,13 +43,18 @@ class UserInfo
     /**
      * @var integer
      */
+    private $countMessages;
+
+    /**
+     * @var integer
+     */
     private $id;
 
     /**
      * @var \Galaxy\GameBundle\Entity\Flipper
      */
     private $flipper;
-    
+
     /**
      *
      * @var Basket 
@@ -100,6 +105,21 @@ class UserInfo
     public function getX()
     {
         return $this->x;
+    }
+
+    public function getCountMessages()
+    {
+        return $this->countMessages;
+    }
+
+    public function setCountMessages($countMessages)
+    {
+        $this->countMessages = $countMessages;
+    }
+    
+    public function increseCountMessages()
+    {
+        $this->countMessages++;
     }
 
     /**
@@ -258,6 +278,5 @@ class UserInfo
     {
         $this->basket = $basket;
     }
-
 
 }
