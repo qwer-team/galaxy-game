@@ -35,6 +35,7 @@ class QuestionsWorker extends Worker
             $service->fail($question);
             $output->writeln("fail {$data['id']} {$seconds}");
         } catch (\Exception $e) {
+            $output->writeln($e->getMessage());
             $output->writeln("closed {$data['id']}");
         }
         return true;

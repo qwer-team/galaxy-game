@@ -4,7 +4,9 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
-        <field name="elementId" type="integer" column="elementId"/>
+        <field name="elementId" type="integer" column="element_id"/>
+        <field name="prizeId" type="integer" column="prize_id"/>
+        <field name="prizeLength" type="integer" column="prize_length"/>
         <field name="bought" type="boolean" column="bought"/>
         <field name="jumpsRemain" type="integer" column="jumpsRemain"/>
         <many-to-one target-entity="UserInfo" field="userInfo">

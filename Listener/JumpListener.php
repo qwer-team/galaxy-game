@@ -8,6 +8,7 @@ use Galaxy\GameBundle\Entity\UserInfo;
 use Galaxy\GameBundle\Entity\Jump;
 use Galaxy\GameBundle\Entity\UserLog;
 use Galaxy\GameBundle\Entity\Basket;
+use Qwer\Curl\Curl;
 
 class JumpListener extends ContainerAware
 {
@@ -208,9 +209,11 @@ class JumpListener extends ContainerAware
         $basket = new Basket();
         $basket->setUserInfo($userInfo);
         $basket->setElementId($element['id']);
+        $basket->setPrizeId($element['prizeId']);
         $basket->setJumpsRemain($element['available']);
         $basket->setSubelementId($subelement['id']);
         $basket->setRestore(!$subelement['restore']);
+        $basket->setPrizeLength($response['prizeLen']);
         $basket->setCoordinates($jump->getCoordinates());
 
         $em = $this->getEntityManager();
@@ -275,17 +278,7 @@ class JumpListener extends ContainerAware
 
     private function makeRequest($url, $data = null)
     {
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        if (!is_null($data)) {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-        }
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        return $response;
+        return Curl::makeRequest($url, $data);
     }
 
 }
