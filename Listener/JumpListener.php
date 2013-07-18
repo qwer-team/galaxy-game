@@ -43,7 +43,7 @@ class JumpListener extends ContainerAware
             $this->processQuestions($userInfo);
             $this->processTypeJump($pointTag, $response, $userId);
             $this->processPrizeJump($response, $jump, $userInfo);
-            
+            $this->processTransfer($userInfo);
             $event->setResponse($response);
             $em->getConnection()->commit();
         } catch (\Exception $e) {
@@ -131,9 +131,9 @@ class JumpListener extends ContainerAware
         $questions = $userInfo->getQuestions();
 
         foreach ($questions as $question) {
-            if($question->getStatus() == 1) {
+            if ($question->getStatus() == 1) {
                 $question->subJumpsToQuestion();
-                if($question->getJumpsToQuestion() == 0){
+                if ($question->getJumpsToQuestion() == 0) {
                     $question->setStatus(2);
                 }
             }
@@ -217,6 +217,60 @@ class JumpListener extends ContainerAware
         $em->persist($basket);
 
         $em->flush();
+    }
+
+    private function processTransfer(UserInfo $userInfo)
+    {
+        $userId = $userInfo->getUserId();
+        $fundInfo = $this->getFundsInfo($userId);
+        $transActive = $fundInfo->transActive;
+        $transSafe = $fundInfo->transSafe;
+        if ($transActive > 0) {
+            $debitResponse = $this->debitTransferFunds($userId, $transActive, 4);
+            if ($debitResponse->result == 'success') {
+                $this->transTransferFunds($userId, $transActive, 1);
+            }
+        }
+        if ($transSafe > 0) {
+            $debitResponse = $this->debitTransferFunds($userId, $transSafe, 5);
+            if ($debitResponse->result == 'success') {
+                $this->transTransferFunds($userId, $transSafe, 2);
+            }
+        }
+    }
+    
+    private function getFundsInfo($userId)
+    {
+        $rawUrl = $this->container->getParameter("documents.get_funds.url");
+        $url = str_replace("{userId}", $userId, $rawUrl);
+        $fundInfo = json_decode($this->makeRequest($url));
+        return $fundInfo;
+    }
+
+    private function debitTransferFunds($userId, $summa, $account)
+    {
+        $data = array(
+            'OA1' => $userId,
+            'summa1' => $summa,
+            'account' => $account
+        );
+        $url = $this->container->getParameter("documents.debit_funds.url");
+
+        $response = json_decode($this->makeRequest($url, $data));
+        return $response;
+    }
+
+    private function transTransferFunds($userId, $summa, $account)
+    {
+        $data = array(
+            'OA1' => $userId,
+            'summa1' => $summa,
+            'account' => $account
+        );
+        $url = $this->container->getParameter("documents.trans_funds.url");
+
+        $response = json_decode($this->makeRequest($url, $data));
+        return $response;
     }
 
     private function makeRequest($url, $data = null)
