@@ -42,7 +42,10 @@ class Message implements PointTypeProcess
         );
         $messageData = $this->infoRemoteService->getMessage($data);
         $message = new MessageEntity();
-        $message->setImage($messageData->image);
+        if(isset($messageData->image)){
+            $message->setImage($messageData->image);
+        }
+        
         $message->setText($messageData->text);
 
         $userInfo = $this->getUserInfo($userId);
@@ -50,6 +53,7 @@ class Message implements PointTypeProcess
 
         $this->em->persist($message);
         $question = new Question();
+        $question->setText($messageData->question);
         $question->setMessageId($messageData->id);
         $question->setJumpsToQuestion($messageData->jumpsToQuestion);
         $question->setRightAnswer($messageData->rightAnswer);
@@ -66,6 +70,7 @@ class Message implements PointTypeProcess
             $this->em->flush();
         } catch (\Exception $e) {
             $this->logger->err($e->getMessage());
+            $this->logger->err(print_r( $message, true));
         }
     }
 
