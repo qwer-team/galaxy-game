@@ -6,6 +6,62 @@
     </id>
     <field name="title" type="text" column="title" nullable="true"/>
     <field name="maxJump" type="integer" column="max_jump" nullable="true"/>
+    <field name="journalDuration" type="integer" column="journal_duration" nullable="true"/>
+    <field name="rentDuration" type="integer" column="rent_duration" nullable="true"/>
+    <field name="rentCost" type="integer" column="rent_cost" nullable="true"/>
+    <field name="countRentMess" type="integer" column="count_rent_mess" nullable="true"/>
+    <field name="activeAccLess" type="integer" column="active_acc_less" nullable="true"/>
+    <field name="activeAccHint" type="text" column="active_acc_hint" nullable="true"/>
+    <field name="messageBuyHint" type="text" column="message_buy_hint" nullable="true"/>
+    <field name="radarCost" type="integer" column="radar_cost" nullable="true"/>
+    <field name="radarSpec" type="boolean" column="radar_spec" nullable="true"/>
+    <field name="nextPointDistance" type="integer" column="next_point_distance" nullable="true"/>
+    <field name="firstLeftBorder" type="integer" column="first_left_border" nullable="true"/>
+    <field name="secondLeftBorder" type="integer" column="second_left_border" nullable="true"/>
+    <field name="firstRightBorder" type="integer" column="first_right_border" nullable="true"/>
+    <field name="secondRightBorder" type="integer" column="second_right_border" nullable="true"/>
+    <field name="distanceHint" type="text" column="distance_hint" nullable="true"/>
+    <field name="searchZoneCost" type="integer" column="search_zone_cost" nullable="true"/>
+    <field name="searchZoneSpec" type="boolean" column="search_zone_spec" nullable="true"/>
+    
+    <field name="leftBorderSearchX" type="integer" column="left_border_search_x" nullable="true"/>
+    <field name="rightBorderSearchX" type="integer" column="right_border_search_x" nullable="true"/>
+    <field name="deltaSearchX" type="integer" column="delta_search_x" nullable="true"/>
+    <field name="leftBorderSearchY" type="integer" column="left_border_search_y" nullable="true"/>
+    <field name="rightBorderSearchY" type="integer" column="right_border_search_y" nullable="true"/>
+    <field name="deltaSearchY" type="integer" column="delta_search_y" nullable="true"/>
+    <field name="leftBorderSearchZ" type="integer" column="left_border_search_z" nullable="true"/>
+    <field name="rightBorderSearchZ" type="integer" column="right_border_search_z" nullable="true"/>
+    <field name="deltaSearchZ" type="integer" column="delta_search_z" nullable="true"/>
+    <field name="incLeftSearchRadius" type="integer" column="incLeftSearchRadius" nullable="true"/>
+    <field name="incRightSearchRadius" type="integer" column="inc_right_search_radius" nullable="true"/>
+    
+    <field name="firstZoneDuration1" type="integer" column="first_zone_duration1" nullable="true"/>
+    <field name="firstZoneCost1" type="integer" column="first_zone_cost1" nullable="true"/>
+    <field name="firstZoneSpec1" type="boolean" column="first_zone_Spec1" nullable="true"/>
+    <field name="firstZoneDuration2" type="integer" column="first_zone_duration2" nullable="true"/>
+    <field name="firstZoneCost2" type="integer" column="first_zone_cost2" nullable="true"/>
+    <field name="firstZoneSpec2" type="boolean" column="first_zone_Spec2" nullable="true"/>
+    <field name="firstZoneDuration3" type="integer" column="first_zone_duration3" nullable="true"/>
+    <field name="firstZoneCost3" type="integer" column="first_zone_cost3" nullable="true"/>
+    <field name="firstZoneSpec3" type="boolean" column="first_zone_Spec3" nullable="true"/>
+    <field name="firstZoneDuration4" type="integer" column="first_zone_duration4" nullable="true"/>
+    <field name="firstZoneCost4" type="integer" column="first_zone_cost4" nullable="true"/>
+    <field name="firstZoneSpec4" type="boolean" column="first_zone_Spec4" nullable="true"/>
+    
+    <field name="secondZoneDuration1" type="integer" column="second_zone_duration1" nullable="true"/>
+    <field name="secondZoneCost1" type="integer" column="second_zone_cost1" nullable="true"/>
+    <field name="secondZoneSpec1" type="boolean" column="second_zone_Spec1" nullable="true"/>
+    <field name="secondZoneDuration2" type="integer" column="second_zone_duration2" nullable="true"/>
+    <field name="secondZoneCost2" type="integer" column="second_zone_cost2" nullable="true"/>
+    <field name="secondZoneSpec2" type="boolean" column="second_zone_Spec2" nullable="true"/>
+    <field name="secondZoneDuration3" type="integer" column="second_zone_duration3" nullable="true"/>
+    <field name="secondZoneCost3" type="integer" column="second_zone_cost3" nullable="true"/>
+    <field name="secondZoneSpec3" type="boolean" column="second_zone_Spec3" nullable="true"/>
+    <field name="secondZoneDuration4" type="integer" column="second_zone_duration4" nullable="true"/>
+    <field name="secondZoneCost4" type="integer" column="second_zone_cost4" nullable="true"/>
+    <field name="secondZoneSpec4" type="boolean" column="second_zone_Spec4" nullable="true"/>
+    
     <field name="costJump" type="integer" column="cost_jump" nullable="true"/>
     <field name="impossibleJumpHint" type="text" column="impossible_jump_hint" nullable="true"/>
     <field name="paymentFromDeposit" type="boolean" column="payment_from_deposit" nullable="true"/>

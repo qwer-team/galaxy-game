@@ -30,6 +30,9 @@
         <parameter key="frontend.reset_question.url">%frontend.url%/reset/{questionId}/{result}</parameter>
     </parameters>
     <services>
+        <service id="galaxy.checkbox.type" class="Galaxy\GameBundle\Form\CheckboxType">
+            <tag name="form.type" alias="gcheckbox" />
+        </service>
         <service id="galaxy.jump_limit.validator" class="Galaxy\GameBundle\Validator\JumpLimitValidator">
             <call method="setEntityManager">
                 <argument type="service" id="doctrine.orm.entity_manager" />

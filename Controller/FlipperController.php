@@ -29,7 +29,6 @@ class FlipperController extends FOSRestController
         $result = array("result" => "fail", 'data' => $request->request->all());
         if ($form->isValid()) {
             $result["result"] = "success";
-            $flipper->setPaymentFromDeposit($request->request->get('paymentFromDeposit'));
             $this->getDoctrine()->getEntityManager()->flush();
         } else {
             $result['error'] = $form->getErrorsAsString();
