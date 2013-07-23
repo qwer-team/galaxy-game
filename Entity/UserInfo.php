@@ -48,6 +48,11 @@ class UserInfo
     /**
      * @var integer
      */
+    private $countRentJumps;
+
+    /**
+     * @var integer
+     */
     private $id;
 
     /**
@@ -92,6 +97,16 @@ class UserInfo
         return $this;
     }
 
+    public function getCountRentJumps()
+    {
+        return $this->countRentJumps;
+    }
+
+    public function setCountRentJumps($countRentJumps)
+    {
+        $this->countRentJumps = $countRentJumps;
+    }
+
     /**
      * Get userId
      *
@@ -134,7 +149,7 @@ class UserInfo
     {
         $this->countMessages = $countMessages;
     }
-    
+
     public function increseCountMessages()
     {
         $this->countMessages++;
@@ -297,7 +312,6 @@ class UserInfo
         $this->basket = $basket;
     }
 
-
     public function getQuestions()
     {
         return $this->questions;
@@ -317,6 +331,5 @@ class UserInfo
     {
         $this->message = $message;
     }
-
 
 }

@@ -5,5 +5,6 @@
         <property name="totalJumps" serialized-name="totalJumps"/>
         <property name="superJumps" serialized-name="superJumps"/>
         <property name="countMessages" serialized-name="countMessages"/>
+        <property name="countRentJumps" serialized-name="countRentJumps"/>
     </class>
 </serializer>
