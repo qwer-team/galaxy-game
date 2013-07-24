@@ -6,5 +6,9 @@
         <property name="superJumps" serialized-name="superJumps"/>
         <property name="countMessages" serialized-name="countMessages"/>
         <property name="countRentJumps" serialized-name="countRentJumps"/>
+        <property name="leftRadius" serialized-name="leftRadius"/>
+        <property name="rightRadius" serialized-name="rightRadius"/>
+        <property name="pointId" serialized-name="pointId"/>
+        <property name="elementId" serialized-name="elementId"/>
     </class>
 </serializer>

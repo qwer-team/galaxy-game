@@ -77,11 +77,55 @@ class UserInfo
      * @var \Galaxy\GameBundle\Entity\Message 
      */
     private $message;
+    private $leftRadius;
+    private $rightRadius;
+    private $pointId;
+    private $elementId;
 
     public function __construct()
     {
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->basket = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function getLeftRadius()
+    {
+        return $this->leftRadius;
+    }
+
+    public function setLeftRadius($leftRadius)
+    {
+        $this->leftRadius = $leftRadius;
+    }
+
+    public function getRightRadius()
+    {
+        return $this->rightRadius;
+    }
+
+    public function setRightRadius($rightRadius)
+    {
+        $this->rightRadius = $rightRadius;
+    }
+
+    public function getPointId()
+    {
+        return $this->pointId;
+    }
+
+    public function setPointId($pointId)
+    {
+        $this->pointId = $pointId;
+    }
+
+    public function getElementId()
+    {
+        return $this->elementId;
+    }
+
+    public function setElementId($elementId)
+    {
+        $this->elementId = $elementId;
     }
 
     /**
