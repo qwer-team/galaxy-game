@@ -27,6 +27,13 @@ class SpaceRemoteService extends ContainerAware
 
         $this->makeRequest($url, $data);
     }
+    
+    public function radarStart($data)
+    {
+        $url = $this->container->getParameter("space.start_radar.url");
+        echo $this->makeRequest($url, $data);
+        return json_decode($this->makeRequest($url, $data));
+    }
 
     public function getCost($element, $basket, $funds)
     {

@@ -19,6 +19,19 @@ class FlipperController extends FOSRestController
         return $this->handleView($view);
     }
 
+    public function getFlipperListAction()
+    {
+        $repo = $this->getFlipperRepo();
+
+        $qb = $repo->createQueryBuilder('flip');
+        $qb->where('flip.id > :flipperId');
+        $qb->setParameter('flipperId', 1);
+        $flippers = $qb->getQuery()->execute();
+
+        $view = $this->view($flippers);
+        return $this->handleView($view);
+    }
+
     public function postFlipperUpdateAction($id, Request $request)
     {
         $repo = $this->getFlipperRepo();
@@ -38,6 +51,7 @@ class FlipperController extends FOSRestController
         return $this->handleView($view);
     }
 
+    
     /**
      * 
      * @return \Doctrine\ORM\EntityRepository

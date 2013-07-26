@@ -97,6 +97,7 @@ class UserInfo
     {
         $this->leftRadius = $leftRadius;
     }
+    
 
     public function getRightRadius()
     {
