@@ -6,9 +6,10 @@
         <property name="superJumps" serialized-name="superJumps"/>
         <property name="countMessages" serialized-name="countMessages"/>
         <property name="countRentJumps" serialized-name="countRentJumps"/>
-        <property name="leftRadius" serialized-name="leftRadius"/>
-        <property name="rightRadius" serialized-name="rightRadius"/>
+        <property name="minRadius" serialized-name="minRadius"/>
+        <property name="maxRadius" serialized-name="maxRadius"/>
         <property name="pointId" serialized-name="pointId"/>
         <property name="elementId" serialized-name="elementId"/>
+        <property name="zoneJumps" serialized-name="zoneJumps"/>
     </class>
 </serializer>

@@ -28,42 +28,42 @@
         <property name="leftBorderSearchY" serialized-name="leftBorderSearchY"/>
         <property name="rightBorderSearchY" serialized-name="rightBorderSearchY"/>
         <property name="deltaSearchY" serialized-name="deltaSearchY"/>
-        <propertZ name="leftBorderSearchZ" serialized-name="leftBorderSearchZ"/>
-        <propertZ name="rightBorderSearchZ" serialized-name="rightBorderSearchZ"/>
-        <propertZ name="deltaSearchZ" serialized-name="deltaSearchZ"/>
-        <propertZ name="incLeftSearchRadius" serialized-name="incLeftSearchRadius"/>
-        <propertZ name="incRightSearchRadius" serialized-name="incRightSearchRadius"/>
+        <property name="leftBorderSearchZ" serialized-name="leftBorderSearchZ"/>
+        <property name="rightBorderSearchZ" serialized-name="rightBorderSearchZ"/>
+        <property name="deltaSearchZ" serialized-name="deltaSearchZ"/>
+        <property name="incLeftSearchRadius" serialized-name="incLeftSearchRadius"/>
+        <property name="incRightSearchRadius" serialized-name="incRightSearchRadius"/>
         
-        <propertZ name="firstZoneDuration1" serialized-name="firstZoneDuration1"/>
-        <propertZ name="firstZoneCost1" serialized-name="firstZoneCost1"/>
-        <propertZ name="firstZoneSpec1" serialized-name="firstZoneSpec1"/>
+        <property name="firstZoneDuration1" serialized-name="firstZoneDuration1"/>
+        <property name="firstZoneCost1" serialized-name="firstZoneCost1"/>
+        <property name="firstZoneSpec1" serialized-name="firstZoneSpec1"/>
         
-        <propertZ name="firstZoneDuration2" serialized-name="firstZoneDuration2"/>
-        <propertZ name="firstZoneCost2" serialized-name="firstZoneCost2"/>
-        <propertZ name="firstZoneSpec2" serialized-name="firstZoneSpec2"/>
+        <property name="firstZoneDuration2" serialized-name="firstZoneDuration2"/>
+        <property name="firstZoneCost2" serialized-name="firstZoneCost2"/>
+        <property name="firstZoneSpec2" serialized-name="firstZoneSpec2"/>
         
-        <propertZ name="firstZoneDuration3" serialized-name="firstZoneDuration3"/>
-        <propertZ name="firstZoneCost3" serialized-name="firstZoneCost3"/>
-        <propertZ name="firstZoneSpec3" serialized-name="firstZoneSpec3"/>
+        <property name="firstZoneDuration3" serialized-name="firstZoneDuration3"/>
+        <property name="firstZoneCost3" serialized-name="firstZoneCost3"/>
+        <property name="firstZoneSpec3" serialized-name="firstZoneSpec3"/>
         
-        <propertZ name="firstZoneDuration4" serialized-name="firstZoneDuration4"/>
-        <propertZ name="firstZoneCost4" serialized-name="firstZoneCost4"/>
-        <propertZ name="firstZoneSpec4" serialized-name="firstZoneSpec4"/>
+        <property name="firstZoneDuration4" serialized-name="firstZoneDuration4"/>
+        <property name="firstZoneCost4" serialized-name="firstZoneCost4"/>
+        <property name="firstZoneSpec4" serialized-name="firstZoneSpec4"/>
         
-        <propertZ name="secondZoneDuration1" serialized-name="secondZoneDuration1"/>
-        <propertZ name="secondZoneCost1" serialized-name="secondZoneCost1"/>
-        <propertZ name="secondZoneSpec1" serialized-name="secondZoneSpec1"/>
+        <property name="secondZoneDuration1" serialized-name="secondZoneDuration1"/>
+        <property name="secondZoneCost1" serialized-name="secondZoneCost1"/>
+        <property name="secondZoneSpec1" serialized-name="secondZoneSpec1"/>
         
-        <propertZ name="secondZoneDuration2" serialized-name="secondZoneDuration2"/>
-        <propertZ name="secondZoneCost2" serialized-name="secondZoneCost2"/>
-        <propertZ name="secondZoneSpec2" serialized-name="secondZoneSpec2"/>
+        <property name="secondZoneDuration2" serialized-name="secondZoneDuration2"/>
+        <property name="secondZoneCost2" serialized-name="secondZoneCost2"/>
+        <property name="secondZoneSpec2" serialized-name="secondZoneSpec2"/>
         
-        <propertZ name="secondZoneDuration3" serialized-name="secondZoneDuration3"/>
-        <propertZ name="secondZoneCost3" serialized-name="secondZoneCost3"/>
-        <propertZ name="secondZoneSpec3" serialized-name="secondZoneSpec3"/>
+        <property name="secondZoneDuration3" serialized-name="secondZoneDuration3"/>
+        <property name="secondZoneCost3" serialized-name="secondZoneCost3"/>
+        <property name="secondZoneSpec3" serialized-name="secondZoneSpec3"/>
         
-        <propertZ name="secondZoneDuration4" serialized-name="secondZoneDuration4"/>
-        <propertZ name="secondZoneCost4" serialized-name="secondZoneCost4"/>
-        <propertZ name="secondZoneSpec4" serialized-name="secondZoneSpec4"/>
+        <property name="secondZoneDuration4" serialized-name="secondZoneDuration4"/>
+        <property name="secondZoneCost4" serialized-name="secondZoneCost4"/>
+        <property name="secondZoneSpec4" serialized-name="secondZoneSpec4"/>
     </class>
 </serializer>

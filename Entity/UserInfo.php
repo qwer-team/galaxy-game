@@ -77,10 +77,11 @@ class UserInfo
      * @var \Galaxy\GameBundle\Entity\Message 
      */
     private $message;
-    private $leftRadius;
-    private $rightRadius;
+    private $minRadius;
+    private $maxRadius;
     private $pointId;
     private $elementId;
+    private $zoneJumps;
 
     public function __construct()
     {
@@ -88,25 +89,34 @@ class UserInfo
         $this->basket = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    public function getLeftRadius()
+    public function getZoneJumps()
     {
-        return $this->leftRadius;
+        return $this->zoneJumps;
     }
 
-    public function setLeftRadius($leftRadius)
+    public function setZoneJumps($zoneJumps)
     {
-        $this->leftRadius = $leftRadius;
-    }
-    
-
-    public function getRightRadius()
-    {
-        return $this->rightRadius;
+        $this->zoneJumps = $zoneJumps;
     }
 
-    public function setRightRadius($rightRadius)
+    public function getMinRadius()
     {
-        $this->rightRadius = $rightRadius;
+        return $this->minRadius;
+    }
+
+    public function setMinRadius($minRadius)
+    {
+        $this->minRadius = $minRadius;
+    }
+
+    public function getMaxRadius()
+    {
+        return $this->maxRadius;
+    }
+
+    public function setMaxRadius($maxRadius)
+    {
+        $this->maxRadius = $maxRadius;
     }
 
     public function getPointId()

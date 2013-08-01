@@ -72,6 +72,7 @@
                 <argument type="string">%user.get_user.url%</argument>
             </call>
         </service>
+        <service id="radar.service" class="Galaxy\GameBundle\Service\RadarService" />
         <service id="galaxy.game.jump_listener" class="Galaxy\GameBundle\Listener\JumpListener">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

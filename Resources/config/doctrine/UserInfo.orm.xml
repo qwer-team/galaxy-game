@@ -24,9 +24,10 @@
         <field name="superJumps" type="integer"/>
         <field name="countMessages" type="integer"/>
         <field name="countRentJumps" type="integer"/>
-        <field name="leftRadius" type="integer"/>
-        <field name="rightRadius" type="integer"/>
+        <field name="minRadius" type="integer"/>
+        <field name="maxRadius" type="integer"/>
         <field name="pointId" type="integer"/>
         <field name="elementId" type="integer"/>
+        <field name="zoneJumps" type="integer"/>
     </entity>
 </doctrine-mapping>

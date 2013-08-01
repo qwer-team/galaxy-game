@@ -94,10 +94,23 @@ class UserInfoController extends FOSRestController
     {
         $repo = $this->getUserInfoRepo();
         $info = $repo->find($id);
-        $info->setLeftRadius(0);
-        $info->setRightRadius(0);
+        $info->setMinRadius(0);
+        $info->setMaxRadius(0);
         $info->setPointId(0);
         $info->setElementId(0);
+        $info->setZoneJumps(0);
+        $this->getDoctrine()->getEntityManager()->flush();
+
+        $view = $this->view($info);
+        return $this->handleView($view);
+    }
+
+    public function getBuyZoneAction($id, $jumps)
+    {
+        $repo = $this->getUserInfoRepo();
+        $info = $repo->find($id);
+
+        $info->setZoneJumps($jumps);
         $this->getDoctrine()->getEntityManager()->flush();
 
         $view = $this->view($info);
@@ -106,32 +119,77 @@ class UserInfoController extends FOSRestController
 
     public function getRadarStartAction($id, $type)
     {
+        $spaceService = $this->get("space.remote_service");
+        $result['result'] = 'fail';
         $repo = $this->getUserInfoRepo();
         $info = $repo->find($id);
         $flipper = $info->getFlipper();
-        $minRadius = $this->getRandomRadius($flipper->getFirstLeftBorder(), $flipper->getFirstRightBorder());
-        $maxRadius = $this->getRandomRadius($flipper->getSecondLeftBorder(), $flipper->getSecondRightBorder());
-        $x = $info->getX();
-        $y = $info->getY();
-        $z = $info->getZ();
         $data = array(
             "type" => $type,
-            "x" => $x,
-            "y" => $y,
-            "z" => $z,
-            "r1" => $minRadius,
-            "r2" => $maxRadius,
-            );
-        $spaceService = $this->get("space.remote_service");
-        $result = $spaceService->radarStart($data);
-        
+            "x" => $info->getX(),
+            "y" => $info->getY(),
+            "z" => $info->getZ(),
+            "r1" => $flipper->getNextPointDistance(),
+            "r2" => $flipper->getMaxJump(),
+        );
+        $response = $spaceService->radarStart($data);
+        if ($response->result == 'success') {
+            $result['result'] = 'success';
+            $data = $this->getZoneRadius($info, $response->point->id);
+            $info->setMinRadius($data['minRadius']);
+            $info->setMaxRadius($data['maxRadius']);
+            $info->setPointId($response->point->id);
+            if ($type == 4) {
+                $info->setElementId($response->subelement->id);
+            }
+            $this->getDoctrine()->getEntityManager()->flush();
+        }
+
         $view = $this->view($result);
         return $this->handleView($view);
     }
-    
-    private function getRandomRadius($left, $right)
+
+    private function getZoneRadius(UserInfo $info, $id)
     {
-        return rand($left, $right);
+        $flipper = $info->getFlipper();
+        $minRadius = rand($flipper->getFirstLeftBorder(), $flipper->getSecondLeftBorder());
+        $maxRadius = rand($flipper->getFirstRightBorder(), $flipper->getSecondRightBorder());
+        $x = $info->getX();
+        $y = $info->getY();
+        $z = $info->getZ();
+        $pointCoord = $this->getCoords($id);
+        $dx = $x - $pointCoord['x'];
+        $dy = $y - $pointCoord['y'];
+        $dz = $z - $pointCoord['z'];
+        $firstDistance = sqrt(pow($dx, 2) + pow($dy, 2) + pow($dz, 2));
+        $secondDistance = sqrt(pow($dx + 1000, 2) + pow($dy + 1000, 2) + pow($dz + 1000, 2));
+        $distance = min($firstDistance, $secondDistance);
+        $r1 = $flipper->getMaxJump() - $distance;
+        $r2 = $distance - $flipper->getNextPointDistance();
+        $result['minRadius'] = $r2 > $minRadius ? $minRadius : $r2;
+        $result['maxRadius'] = $r1 > $maxRadius ? $maxRadius : $r2;
+
+        return $result;
+    }
+
+    private function getCoords($id)
+    {
+        $id--;
+        $x = $id % 1000;
+        $id -= $x;
+        $x++;
+
+        $y = $id % 1000000 / 1000;
+        $id -= $y * 1000;
+        $y++;
+        $z = $id % 1000000000 / 1000000;
+        $z++;
+
+        return array(
+            "x" => $x,
+            "y" => $y,
+            "z" => $z,
+        );
     }
 
 }
