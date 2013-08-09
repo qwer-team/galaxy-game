@@ -61,7 +61,7 @@ class BuyElementListener
                 return false;
             }
         } else {
-            if ($funds->deposite < $element->prize) {
+            if ($funds->deposite < $element->price) {
                 return false;
             }
         }

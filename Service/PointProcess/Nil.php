@@ -8,7 +8,7 @@ use Galaxy\GameBundle\Service\PointProcess\PointTypeProcess;
 class Nil extends ContainerAware implements PointTypeProcess
 {
 
-    public function proceed($response, $userId)
+    public function proceed($parameter, $userId)
     {
         $documentsService = $this->container->get("document.remote_service");
         $fundsInfo = $documentsService->getFunds($userId);

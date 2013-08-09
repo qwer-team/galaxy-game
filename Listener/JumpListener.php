@@ -10,41 +10,44 @@ use Galaxy\GameBundle\Entity\UserLog;
 use Galaxy\GameBundle\Entity\Basket;
 use Qwer\Curl\Curl;
 
-class JumpListener extends ContainerAware
-{
+class JumpListener extends ContainerAware {
 
-    public function onEvent(JumpEvent $event)
-    {
+    public function onEvent(JumpEvent $event) {
         $jump = $event->getJump();
 
         $userId = $jump->getUserId();
         $userInfo = $this->getUserInfo($userId);
 
-        $userInfo->setNewCoordinates($jump);
+        
         if ($jump->getSuperjump()) {
             $userInfo->subSuperJump();
         }
-        $userInfo->addTotalJump();
-
-
+        
+        $flipper = $userInfo->getFlipper();
+        $jumpAcc = $flipper->getPaymentFromDeposit() ? 2 : 1;
         $em = $this->getEntityManager();
 
 
         $em->getConnection()->beginTransaction();
 
         try {
-            $em->flush();
-            $this->debitFunds($userInfo);
+            $this->processRentFlipper($userInfo);
+            $this->debitFunds($userId, $flipper->getCostJump(), $jumpAcc);
+            $this->processTransfer($userInfo);
+            //$this->processMoveZone($userInfo);
             $response = $this->spaceJump($jump);
             $pointTag = $response["type"]["tag"];
+            $parameter = $response['subtype']['parameter'];
             $this->logMessage($userId, $response["type"]["message1"]);
             $this->cleanCapturedPrizes($userInfo);
             $this->updateBoughtPrizes($userInfo);
             $this->processMessage($userInfo);
             $this->processQuestions($userInfo);
-            $this->processTypeJump($pointTag, $response, $userId);
+            $this->processTypeJump($pointTag, $parameter, $userId);
             $this->processPrizeJump($response, $jump, $userInfo);
-            $this->processTransfer($userInfo);
+            $userInfo->setNewCoordinates($jump);
+            $userInfo->addTotalJump();
+            $em->flush();
             $event->setResponse($response);
             $em->getConnection()->commit();
         } catch (\Exception $e) {
@@ -53,8 +56,7 @@ class JumpListener extends ContainerAware
         }
     }
 
-    private function logMessage($userId, $message)
-    {
+    private function logMessage($userId, $message) {
         if ($message == "") {
             return;
         }
@@ -73,8 +75,7 @@ class JumpListener extends ContainerAware
      * @param type $userId
      * @return \Galaxy\GameBundle\Entity\UserInfo
      */
-    private function getUserInfo($userId)
-    {
+    private function getUserInfo($userId) {
         $em = $this->getEntityManager();
         $namespace = "GalaxyGameBundle:UserInfo";
         $repo = $em->getRepository($namespace);
@@ -86,28 +87,11 @@ class JumpListener extends ContainerAware
      * 
      * @return \Doctrine\ORM\EntityManager
      */
-    private function getEntityManager()
-    {
+    private function getEntityManager() {
         return $em = $this->container->get("doctrine.orm.entity_manager");
     }
 
-    private function debitFunds(UserInfo $userInfo)
-    {
-        $flipper = $userInfo->getFlipper();
-        $data = array(
-            'OA1' => $userInfo->getUserId(),
-            'summa1' => $flipper->getCostJump(),
-            'account' => ($flipper->getPaymentFromDeposit() ? 2 : 1)
-        );
-        $url = $this->container->getParameter("documents.debit_funds.url");
-
-        $response = json_decode($this->makeRequest($url, $data));
-
-        return $response;
-    }
-
-    private function spaceJump(Jump $jump)
-    {
+    private function spaceJump(Jump $jump) {
         $rawUrl = $this->container->getParameter("space.jump_proceed.url");
         $find = array("{x}", "{y}", "{z}");
         $replace = $jump->getCoordinates();
@@ -118,8 +102,7 @@ class JumpListener extends ContainerAware
         return $result;
     }
 
-    private function processMessage(UserInfo $userInfo)
-    {
+    private function processMessage(UserInfo $userInfo) {
         $message = $userInfo->getMessage();
         if ($message) {
             $userInfo->setMessage(null);
@@ -127,8 +110,7 @@ class JumpListener extends ContainerAware
         }
     }
 
-    private function processQuestions(UserInfo $userInfo)
-    {
+    private function processQuestions(UserInfo $userInfo) {
         $questions = $userInfo->getQuestions();
 
         foreach ($questions as $question) {
@@ -142,17 +124,15 @@ class JumpListener extends ContainerAware
         $this->getEntityManager()->flush();
     }
 
-    private function processTypeJump($tag, $response, $userId)
-    {
+    private function processTypeJump($tag, $parameter, $userId) {
         $serviceName = "game.process_point_type.$tag";
         if ($this->container->has($serviceName)) {
             $service = $this->container->get($serviceName);
-            $service->proceed($response, $userId);
+            $service->proceed($parameter, $userId);
         }
     }
 
-    private function cleanCapturedPrizes($userInfo)
-    {
+    private function cleanCapturedPrizes($userInfo) {
         $em = $this->getEntityManager();
         $repo = $em->getRepository("GalaxyGameBundle:Basket");
         $criteria = array(
@@ -171,8 +151,7 @@ class JumpListener extends ContainerAware
         $em->flush();
     }
 
-    private function updateBoughtPrizes($userInfo)
-    {
+    private function updateBoughtPrizes($userInfo) {
         $em = $this->getEntityManager();
         $repo = $em->getRepository("GalaxyGameBundle:Basket");
         $spaceService = $this->container->get("space.remote_service");
@@ -198,8 +177,7 @@ class JumpListener extends ContainerAware
         $em->flush();
     }
 
-    private function processPrizeJump($response, Jump $jump, UserInfo $userInfo)
-    {
+    private function processPrizeJump($response, Jump $jump, UserInfo $userInfo) {
         if ($response['subelement'] == null || $response['element']['blocked']) {
             return;
         }
@@ -222,36 +200,111 @@ class JumpListener extends ContainerAware
         $em->flush();
     }
 
-    private function processTransfer(UserInfo $userInfo)
-    {
+    private function processTransfer(UserInfo $userInfo) {
         $userId = $userInfo->getUserId();
         $fundInfo = $this->getFundsInfo($userId);
         $transActive = $fundInfo->transActive;
         $transSafe = $fundInfo->transSafe;
         if ($transActive > 0) {
-            $debitResponse = $this->debitTransferFunds($userId, $transActive, 4);
+            $debitResponse = $this->debitFunds($userId, $transActive, 4);
             if ($debitResponse->result == 'success') {
-                $this->transTransferFunds($userId, $transActive, 1);
+                $this->transFunds($userId, $transActive, 1);
             }
         }
         if ($transSafe > 0) {
-            $debitResponse = $this->debitTransferFunds($userId, $transSafe, 5);
+            $debitResponse = $this->debitFunds($userId, $transSafe, 5);
             if ($debitResponse->result == 'success') {
-                $this->transTransferFunds($userId, $transSafe, 2);
+                $this->transFunds($userId, $transSafe, 2);
             }
         }
     }
-    
-    private function getFundsInfo($userId)
+
+    private function processRentFlipper(UserInfo $userInfo) {
+        $flipper = $userInfo->getFlipper();
+        if ($flipper->getId() == 1) {
+            return;
+        } elseif ($userInfo->getCountRentJumps() == 0) {
+            $this->debitFunds($userInfo->getUserId(), $flipper->getRentCost(), 1);
+            $userInfo->setCountRentJumps($flipper->getRentDuration());
+        }
+        $userInfo->decCountRentJumps();
+
+        $em = $this->getEntityManager();
+        $em->persist($userInfo);
+        $em->flush();
+    }
+
+    private function processMoveZone(UserInfo $userInfo, Jump $jump) {
+        if ($userInfo->getZoneJumps() == 0) {
+            $userInfo->setMinRadius(0);
+            $userInfo->setMaxRadius(0);
+            $userInfo->setPointId(0);
+            $userInfo->setElementId(0);
+            $userInfo->setZoneJumps(0);
+            $userInfo->setCentralPointId(0);
+            $userInfo->setPointType(0);
+            $this->getDoctrine()->getEntityManager()->flush();
+            return;
+        } elseif (!$this->pointInMoveZone($userInfo, $jump)) {
+            return;
+        }
+        $data = array(
+            '1' => "plus_percent",
+            '2' => "plus_all_period",
+            '3' => "plus_prize_period"
+        );
+        $userId = $userInfo->getUserId();
+        $userInfo->decZoneJump();
+        $pointCoord = $jump->getCoordinates();
+        $pointJumpId = $this->getId($pointCoord['x'], $pointCoord['y'], $pointCoord['z']);
+        if($pointJumpId == $userInfo->getPointId())
+        {
+            $this->processTypeJump($data["$userInfo->getPointType()"], $parameter, $userId);
+        }
+    }
+    private function getId($x, $y, $z)
     {
+        $id = $x + ($y - 1) * 1000 + ($z - 1) * 1000000;
+
+        return $id;
+    }
+
+    private function pointInMoveZone(UserInfo $userInfo, Jump $jump) {
+        $minR = $userInfo->getMinRadius();
+        $maxR = $userInfo->getMaxRadius();
+        $x = $userInfo->getX();
+        $y = $userInfo->getY();
+        $z = $userInfo->getZ();
+        $pointCoord = $jump->getCoordinates();
+        $dx = $x - $pointCoord['x'];
+        $dy = $y - $pointCoord['y'];
+        $dz = $z - $pointCoord['z'];
+        $distance1 = sqrt(pow($dx, 2) + pow($dy, 2) + pow($dz, 2));
+
+        $distance2 = sqrt(pow(999 - abs($dx), 2) + pow($dy, 2) + pow($dz, 2));
+        $distance3 = sqrt(pow($dx, 2) + pow(999 - abs($dy), 2) + pow($dz, 2));
+        $distance4 = sqrt(pow($dx, 2) + pow($dy, 2) + pow(999 - abs($dz), 2));
+
+        $distance5 = sqrt(pow(999 - abs($dx), 2) + pow(999 - abs($dy), 2) + pow($dz, 2));
+        $distance6 = sqrt(pow(999 - abs($dx), 2) + pow($dy, 2) + pow(999 - abs($dz), 2));
+        $distance7 = sqrt(pow($dx, 2) + pow(999 - abs($dy), 2) + pow(999 - abs($dz), 2));
+
+        $distance8 = sqrt(pow(999 - abs($dx), 2) + pow(999 - abs($dy), 2) + pow(999 - abs($dz), 2));
+        $distance = min($distance1, $distance2, $distance3, $distance4, $distance5, $distance6, $distance7, $distance8);
+        if ($minR <= $distance && $distance <= $maxR) {
+            return true;
+        }
+        return false;
+    }
+
+    private function getFundsInfo($userId) {
         $rawUrl = $this->container->getParameter("documents.get_funds.url");
         $url = str_replace("{userId}", $userId, $rawUrl);
         $fundInfo = json_decode($this->makeRequest($url));
         return $fundInfo;
     }
 
-    private function debitTransferFunds($userId, $summa, $account)
-    {
+    private function debitFunds($userId, $summa, $account) {
         $data = array(
             'OA1' => $userId,
             'summa1' => $summa,
@@ -263,8 +316,7 @@ class JumpListener extends ContainerAware
         return $response;
     }
 
-    private function transTransferFunds($userId, $summa, $account)
-    {
+    private function transFunds($userId, $summa, $account) {
         $data = array(
             'OA1' => $userId,
             'summa1' => $summa,
@@ -276,8 +328,7 @@ class JumpListener extends ContainerAware
         return $response;
     }
 
-    private function makeRequest($url, $data = null)
-    {
+    private function makeRequest($url, $data = null) {
         return Curl::makeRequest($url, $data);
     }
 

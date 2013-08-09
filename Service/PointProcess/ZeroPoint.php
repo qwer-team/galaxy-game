@@ -8,7 +8,7 @@ use Galaxy\GameBundle\Service\PointProcess\PointTypeProcess;
 class ZeroPoint extends ContainerAware implements PointTypeProcess
 {
 
-    public function proceed($response, $userId)
+    public function proceed($parameter, $userId)
     {
         $userInfo = $this->getUserInfo($userId);
         $flipperId = $userInfo->getFlipper()->getId();

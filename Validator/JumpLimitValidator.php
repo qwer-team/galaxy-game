@@ -41,12 +41,22 @@ class JumpLimitValidator extends ConstraintValidator
 
         $flipper = $this->getFlipper($userId);
         $flipperMaxJump = $flipper->getMaxJump();
-        $dx = $x - $userInfo->getX();
-        $dy = $y - $userInfo->getY();
-        $dz = $z - $userInfo->getZ();
-        $firstDistance = sqrt(pow($dx, 2) + pow($dy, 2) + pow($dz, 2));
-        $secondDistance = sqrt(pow($dx + 1000, 2) + pow($dy + 1000, 2) + pow($dz + 1000, 2));
-        $userJump = min($firstDistance, $secondDistance);
+        $dx = $userInfo->getX() - $x;
+        $dy = $userInfo->getY() - $y;
+        $dz = $userInfo->getZ() - $z;
+        
+        $distance1 = sqrt(pow($dx, 2) + pow($dy, 2) + pow($dz, 2));
+        
+        $distance2 = sqrt(pow(999 - abs($dx), 2) + pow($dy, 2) + pow($dz, 2));
+        $distance3 = sqrt(pow($dx, 2) + pow(999 - abs($dy), 2) + pow($dz, 2));
+        $distance4 = sqrt(pow($dx, 2) + pow($dy, 2) + pow(999 - abs($dz), 2));
+        
+        $distance5 = sqrt(pow(999 - abs($dx), 2) + pow(999 - abs($dy), 2) + pow($dz, 2));
+        $distance6 = sqrt(pow(999 - abs($dx), 2) + pow($dy, 2) + pow(999 - abs($dz), 2));
+        $distance7 = sqrt(pow($dx, 2) + pow(999 - abs($dy), 2) + pow(999 - abs($dz), 2));
+        
+        $distance8 = sqrt(pow(999 - abs($dx), 2) + pow(999 - abs($dy), 2) + pow(999 - abs($dz), 2));
+        $userJump = min($distance1, $distance2, $distance3, $distance4, $distance5, $distance6, $distance7, $distance8);
         if ($flipperMaxJump < $userJump && $userInfo->getSuperJumps() <= 0) {
             $this->context->addViolation($constraint->getMessage());
         }

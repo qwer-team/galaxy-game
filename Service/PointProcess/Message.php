@@ -28,7 +28,7 @@ class Message implements PointTypeProcess
     private $infoRemoteService;
     private $logger;
 
-    public function proceed($response, $userId)
+    public function proceed($parameter, $userId)
     {
         $user = $this->userRemoteService->getUser($userId);
         $birthday = new \DateTime($user->birthday);

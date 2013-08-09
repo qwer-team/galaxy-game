@@ -21,10 +21,8 @@ class MinusPercent implements PointTypeProcess
         $this->url = $url;
     }
 
-    public function proceed($response, $userId)
+    public function proceed($parameter, $userId)
     {
-        $parameter = $response['subtype']['parameter'];
-        //$documentsService = $this->container->get("document.remote_service");
         $fundsInfo = $this->documentService->getFunds($userId);
         $cash = $fundsInfo->active;
         $summa1 = $cash * $parameter / 100;

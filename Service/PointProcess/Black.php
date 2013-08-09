@@ -7,9 +7,8 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 
 class Black extends ContainerAware implements PointTypeProcess
 {
-    public function proceed($response, $userId)
+    public function proceed($parameter, $userId)
     {
-        $parameter = $response['subtype']['parameter'];
         $days = $this->container->getParameter("user.lock.days");
         $interval = str_replace("{days}", $parameter, $days);
         $date = new \DateTime();

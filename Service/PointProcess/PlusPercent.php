@@ -7,9 +7,8 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 
 class PlusPercent extends ContainerAware implements PointTypeProcess
 {
-    public function proceed($response, $userId)
+    public function proceed($parameter, $userId)
     {
-        $parameter = $response['subtype']['parameter'];
         $documentsService = $this->container->get("document.remote_service");
         $fundsInfo = $documentsService->getFunds($userId);
         $cash = $fundsInfo->active;

@@ -34,6 +34,8 @@
         <service id="galaxy.checkbox.type" class="Galaxy\GameBundle\Form\CheckboxType">
             <tag name="form.type" alias="gcheckbox" />
         </service>
+        
+        <!-- Jump Validation-->
         <service id="galaxy.jump_limit.validator" class="Galaxy\GameBundle\Validator\JumpLimitValidator">
             <call method="setEntityManager">
                 <argument type="service" id="doctrine.orm.entity_manager" />
@@ -49,6 +51,8 @@
             </call>
             <tag name="validator.constraint_validator" alias="funds_limit" />
         </service>
+        <!-- -->
+        
         <service id="document.remote_service" class="%document.game.remote_service.class%">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

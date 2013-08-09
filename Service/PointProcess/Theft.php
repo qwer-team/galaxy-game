@@ -7,10 +7,9 @@ use Galaxy\GameBundle\Service\PointProcess\PointTypeProcess;
 
 class Theft extends ContainerAware implements PointTypeProcess
 {
-    public function proceed($response, $userId)
+    public function proceed($parameter, $userId)
     {
         $userInfo = $this->getUserInfo($userId);
-        $parameter = $response['subtype']['parameter'];
         $flipperId = $userInfo->getFlipper()->getId();
         $newFlipperId = $flipperId - $parameter;
         $newFlipperId = ($newFlipperId >= 1 ? $newFlipperId : 1); 

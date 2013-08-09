@@ -20,14 +20,17 @@
         <field name="x" type="integer"/>
         <field name="y" type="integer"/>
         <field name="z" type="integer"/>
-        <field name="totalJumps" type="integer"/>
-        <field name="superJumps" type="integer"/>
-        <field name="countMessages" type="integer"/>
-        <field name="countRentJumps" type="integer"/>
-        <field name="minRadius" type="integer"/>
-        <field name="maxRadius" type="integer"/>
-        <field name="pointId" type="integer"/>
-        <field name="elementId" type="integer"/>
-        <field name="zoneJumps" type="integer"/>
+        <field name="totalJumps" type="integer" column="total_jumps"/>
+        <field name="superJumps" type="integer" column="super_jumps"/>
+        <field name="countMessages" type="integer" column="count_messages"/>
+        <field name="countRentJumps" type="integer" column="count_rent_jumps"/>
+        <field name="minRadius" type="integer" column="min_radius"/>
+        <field name="maxRadius" type="integer" column="max_radius"/>
+        <field name="pointId" type="integer" column="point_id"/>
+        <field name="subElementId" type="integer" column="sub_element_id"/>
+        <field name="subTypeId" type="integer" column="sub_type_id"/>
+        <field name="zoneJumps" type="integer" column="zone_jumps"/>
+        <field name="centralPointId" type="integer" column="central_point_id"/>
+        <field name="pointType" type="integer" column="point_type"/>
     </entity>
 </doctrine-mapping>
