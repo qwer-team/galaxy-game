@@ -17,7 +17,7 @@ class JumpController extends FOSRestController
         $jump = new Jump();
         $form = $this->createForm(new JumpType(), $jump);
         $form->bind($request);
-
+        
         $result = array("result" => "fail validate");
         if ($form->isValid()) {
             $event = new JumpEvent($jump);

@@ -21,6 +21,8 @@
         <parameter key="usersurl">http://demo11.qwer.com.ua</parameter>
         <parameter key="user.frontend.lock">%usersurl%/locks/{userId}/user.json</parameter>
         <parameter key="space.add_single_subelement.url">%space.url%/subelement/addSingle/</parameter>
+        <parameter key="space.get_subelement.url">%space.url%/getsubelement/{id}</parameter>
+        <parameter key="space.get_subtype.url">%space.url%/getsubtype/{id}</parameter>
         <parameter key="get.prize_list.url">%space.url%/prize/list/</parameter>
         <parameter key="info.url">gala.my/api</parameter>
         <parameter key="info.find_message.url">%info.url%/find/message.json</parameter>

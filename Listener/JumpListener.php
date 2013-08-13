@@ -18,11 +18,11 @@ class JumpListener extends ContainerAware {
         $userId = $jump->getUserId();
         $userInfo = $this->getUserInfo($userId);
 
-        
+
         if ($jump->getSuperjump()) {
             $userInfo->subSuperJump();
         }
-        
+
         $flipper = $userInfo->getFlipper();
         $jumpAcc = $flipper->getPaymentFromDeposit() ? 2 : 1;
         $em = $this->getEntityManager();
@@ -34,12 +34,13 @@ class JumpListener extends ContainerAware {
             $this->processRentFlipper($userInfo);
             $this->debitFunds($userId, $flipper->getCostJump(), $jumpAcc);
             $this->processTransfer($userInfo);
-            //$this->processMoveZone($userInfo);
+            $this->cleanCapturedPrizes($userInfo);
+            $this->processMoveZone($userInfo, $jump);
             $response = $this->spaceJump($jump);
             $pointTag = $response["type"]["tag"];
             $parameter = $response['subtype']['parameter'];
             $this->logMessage($userId, $response["type"]["message1"]);
-            $this->cleanCapturedPrizes($userInfo);
+            
             $this->updateBoughtPrizes($userInfo);
             $this->processMessage($userInfo);
             $this->processQuestions($userInfo);
@@ -144,9 +145,9 @@ class JumpListener extends ContainerAware {
         if (!$oldPrize) {
             return;
         }
-        if ($oldPrize->getRestore()) {
-            $this->restorePrize($oldPrize);
-        }
+         if ($oldPrize->getRestore()) {
+          $this->restorePrize($oldPrize);
+          } 
         $em->remove($oldPrize);
         $em->flush();
     }
@@ -181,7 +182,7 @@ class JumpListener extends ContainerAware {
         if ($response['subelement'] == null || $response['element']['blocked']) {
             return;
         }
-
+        
         $subelement = $response['subelement'];
         $element = $response['element'];
         $basket = new Basket();
@@ -193,10 +194,10 @@ class JumpListener extends ContainerAware {
         $basket->setRestore(!$subelement['restore']);
         $basket->setPrizeLength($response['prizeLen']);
         $basket->setCoordinates($jump->getCoordinates());
-
+        
         $em = $this->getEntityManager();
         $em->persist($basket);
-
+        
         $em->flush();
     }
 
@@ -230,24 +231,19 @@ class JumpListener extends ContainerAware {
         $userInfo->decCountRentJumps();
 
         $em = $this->getEntityManager();
-        $em->persist($userInfo);
         $em->flush();
     }
 
     private function processMoveZone(UserInfo $userInfo, Jump $jump) {
+
         if ($userInfo->getZoneJumps() == 0) {
-            $userInfo->setMinRadius(0);
-            $userInfo->setMaxRadius(0);
-            $userInfo->setPointId(0);
-            $userInfo->setElementId(0);
-            $userInfo->setZoneJumps(0);
-            $userInfo->setCentralPointId(0);
-            $userInfo->setPointType(0);
-            $this->getDoctrine()->getEntityManager()->flush();
+            $this->clearZone($userInfo);
             return;
         } elseif (!$this->pointInMoveZone($userInfo, $jump)) {
             return;
         }
+
+
         $data = array(
             '1' => "plus_percent",
             '2' => "plus_all_period",
@@ -256,29 +252,72 @@ class JumpListener extends ContainerAware {
         $userId = $userInfo->getUserId();
         $userInfo->decZoneJump();
         $pointCoord = $jump->getCoordinates();
-        $pointJumpId = $this->getId($pointCoord['x'], $pointCoord['y'], $pointCoord['z']);
-        if($pointJumpId == $userInfo->getPointId())
-        {
-            $this->processTypeJump($data["$userInfo->getPointType()"], $parameter, $userId);
+        $pointJumpId = $this->getId($pointCoord[0], $pointCoord[1], $pointCoord[2]);
+
+        if ($pointJumpId == $userInfo->getPointId()) {
+
+            if ($userInfo->getPointType() != 4) {
+                $point = $this->getSubtype($userInfo->getSubTypeId());
+                $this->processTypeJump($data[$userInfo->getPointType()], $point["parameter"], $userId);
+            } else {
+                $response = $this->getSubelement($userInfo->getSubElementId());
+                $this->processPrizeJump($response, $jump, $userInfo);
+            }
+            $this->clearZone($userInfo);
         }
     }
-    private function getId($x, $y, $z)
-    {
+
+    private function clearZone(UserInfo $userInfo) {
+        $userInfo->setMinRadius(0);
+        $userInfo->setMaxRadius(0);
+        $userInfo->setPointId(0);
+        $userInfo->setSubElementId(0);
+        $userInfo->setZoneJumps(0);
+        $userInfo->setCentralPointId(0);
+        $userInfo->setPointType(0);
+        $userInfo->setSubTypeId(0);
+        $em = $this->getEntityManager();
+
+        $em->flush();
+    }
+
+    private function getId($x, $y, $z) {
         $id = $x + ($y - 1) * 1000 + ($z - 1) * 1000000;
 
         return $id;
     }
 
+    private function getCoords($id) {
+        $id--;
+        $x = $id % 1000;
+        $id -= $x;
+        $x++;
+
+        $y = $id % 1000000 / 1000;
+        $id -= $y * 1000;
+        $y++;
+        $z = $id % 1000000000 / 1000000;
+        $z++;
+
+        return array(
+            "x" => $x,
+            "y" => $y,
+            "z" => $z,
+        );
+    }
+
     private function pointInMoveZone(UserInfo $userInfo, Jump $jump) {
+
         $minR = $userInfo->getMinRadius();
         $maxR = $userInfo->getMaxRadius();
-        $x = $userInfo->getX();
-        $y = $userInfo->getY();
-        $z = $userInfo->getZ();
+
+        $centralCoord = $this->getCoords($userInfo->getCentralPointId());
         $pointCoord = $jump->getCoordinates();
-        $dx = $x - $pointCoord['x'];
-        $dy = $y - $pointCoord['y'];
-        $dz = $z - $pointCoord['z'];
+
+        $dx = $centralCoord['x'] - $pointCoord[0];
+        $dy = $centralCoord['y'] - $pointCoord[1];
+        $dz = $centralCoord['z'] - $pointCoord[2];
+
         $distance1 = sqrt(pow($dx, 2) + pow($dy, 2) + pow($dz, 2));
 
         $distance2 = sqrt(pow(999 - abs($dx), 2) + pow($dy, 2) + pow($dz, 2));
@@ -290,8 +329,11 @@ class JumpListener extends ContainerAware {
         $distance7 = sqrt(pow($dx, 2) + pow(999 - abs($dy), 2) + pow(999 - abs($dz), 2));
 
         $distance8 = sqrt(pow(999 - abs($dx), 2) + pow(999 - abs($dy), 2) + pow(999 - abs($dz), 2));
+
         $distance = min($distance1, $distance2, $distance3, $distance4, $distance5, $distance6, $distance7, $distance8);
+
         if ($minR <= $distance && $distance <= $maxR) {
+
             return true;
         }
         return false;
@@ -326,6 +368,18 @@ class JumpListener extends ContainerAware {
 
         $response = json_decode($this->makeRequest($url, $data));
         return $response;
+    }
+
+    private function getSubelement($id) {
+        $rawUrl = $this->container->getParameter("space.get_subelement.url");
+        $url = str_replace("{id}", $id, $rawUrl);
+        return json_decode($this->makeRequest($url), true);
+    }
+
+    private function getSubtype($id) {
+        $rawUrl = $this->container->getParameter("space.get_subtype.url");
+        $url = str_replace("{id}", $id, $rawUrl);
+        return json_decode($this->makeRequest($url), true);
     }
 
     private function makeRequest($url, $data = null) {

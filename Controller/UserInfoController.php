@@ -132,17 +132,17 @@ class UserInfoController extends FOSRestController {
             $info->setMinRadius($data['minRadius']);
             $info->setMaxRadius($data['maxRadius']);
             $info->setPointId($response->point->id);
-            $info->setPointType($response->point->id);
+            $info->setPointType($type);
             $info->setSubTypeId($response->point->subtype);
-            $info->setCentralPointId($type);
+            $info->setCentralPointId($this->getId($info->getX(), $info->getY(), $info->getZ()));
             if ($type == 4) {
                 $info->setSubElementId($response->subelement->id);
             }
             $this->getDoctrine()->getEntityManager()->flush();
         }
-        print_r($response);
+        
         $view = $this->view($result);
-        $view->setFormat('json');
+        
         return $this->handleView($view);
     }
 
