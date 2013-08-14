@@ -40,7 +40,7 @@ class JumpListener extends ContainerAware {
             $pointTag = $response["type"]["tag"];
             $parameter = $response['subtype']['parameter'];
             $this->logMessage($userId, $response["type"]["message1"]);
-            
+
             $this->updateBoughtPrizes($userInfo);
             $this->processMessage($userInfo);
             $this->processQuestions($userInfo);
@@ -136,6 +136,7 @@ class JumpListener extends ContainerAware {
     private function cleanCapturedPrizes($userInfo) {
         $em = $this->getEntityManager();
         $repo = $em->getRepository("GalaxyGameBundle:Basket");
+        $spaceService = $this->container->get("space.remote_service");
         $criteria = array(
             "userInfo" => $userInfo,
             "bought" => false,
@@ -145,9 +146,9 @@ class JumpListener extends ContainerAware {
         if (!$oldPrize) {
             return;
         }
-         if ($oldPrize->getRestore()) {
-          $this->restorePrize($oldPrize);
-          } 
+        if ($oldPrize->getRestore()) {
+            $spaceService->restorePrize($oldPrize);
+        }
         $em->remove($oldPrize);
         $em->flush();
     }
@@ -182,7 +183,7 @@ class JumpListener extends ContainerAware {
         if ($response['subelement'] == null || $response['element']['blocked']) {
             return;
         }
-        
+
         $subelement = $response['subelement'];
         $element = $response['element'];
         $basket = new Basket();
@@ -194,10 +195,10 @@ class JumpListener extends ContainerAware {
         $basket->setRestore(!$subelement['restore']);
         $basket->setPrizeLength($response['prizeLen']);
         $basket->setCoordinates($jump->getCoordinates());
-        
+
         $em = $this->getEntityManager();
         $em->persist($basket);
-        
+
         $em->flush();
     }
 
