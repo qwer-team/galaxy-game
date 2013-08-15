@@ -7,7 +7,7 @@
     <parameters>
         <parameter key="document.game.remote_service.class">Galaxy\GameBundle\Service\DocumentsRemoteService</parameter>
         <parameter key="space.game.remote_service.class">Galaxy\GameBundle\Service\SpaceRemoteService</parameter>
-        <parameter key="documentsurl">http://demo10.qwer.com.ua/documents</parameter>
+        <parameter key="documentsurl">http://demo11.qwer.com.ua/documents</parameter>
         <parameter key="documents.get_funds.url">%documentsurl%/{userId}/funds.json</parameter>
         <parameter key="documents.debit_funds.url">%documentsurl%/servicesDebit/create/approve.json</parameter>
         <parameter key="documents.deposite_funds.url">%documentsurl%/fundsTransfer/create/approve.json</parameter>
@@ -18,7 +18,7 @@
         <parameter key="space.restore_prize.url">%space.url%/subelement/restore/</parameter>
         <parameter key="space.start_radar.url">%space.url%/radar/find/</parameter>
         <parameter key="user.lock.days">+{days} days</parameter>
-        <parameter key="usersurl">http://demo11.qwer.com.ua</parameter>
+        <parameter key="usersurl">http://demo10.qwer.com.ua</parameter>
         <parameter key="user.frontend.lock">%usersurl%/locks/{userId}/user.json</parameter>
         <parameter key="space.add_single_subelement.url">%space.url%/subelement/addSingle/</parameter>
         <parameter key="space.get_subelement.url">%space.url%/getsubelement/{id}</parameter>
