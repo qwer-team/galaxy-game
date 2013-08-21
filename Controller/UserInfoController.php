@@ -74,7 +74,7 @@ class UserInfoController extends FOSRestController {
         $flipper = $flipperRepo->find($flipperId);
         $info = $repo->find($id);
         $currentFlip = $info->getFlipper();
-        if ($flipper->getId() - $currentFlip->getId() == 1) {
+        if ($flipper->getId() - $currentFlip->getId() == 1 || $flipper->getId() == 1) {
             $info->setFlipper($flipper);
             $info->setCountRentJumps($flipper->getRentDuration());
             $this->getDoctrine()->getEntityManager()->flush();
@@ -140,9 +140,9 @@ class UserInfoController extends FOSRestController {
             }
             $this->getDoctrine()->getEntityManager()->flush();
         }
-        
+
         $view = $this->view($result);
-        
+
         return $this->handleView($view);
     }
 
