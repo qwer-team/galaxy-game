@@ -26,6 +26,7 @@ class FlipperController extends FOSRestController
         $flippers = $repo->findAll();
 
         $view = $this->view($flippers);
+        $view->setFormat('json');
         return $this->handleView($view);
     }
 
