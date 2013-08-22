@@ -23,10 +23,12 @@ class FlipperController extends FOSRestController
     {
         $repo = $this->getFlipperRepo();
 
-        $flippers = $repo->findAll();
+        $qb = $repo->createQueryBuilder('flip');
+        $qb->where('flip.id > :flipperId');
+        $qb->setParameter('flipperId', 1);
+        $flippers = $qb->getQuery()->execute();
 
         $view = $this->view($flippers);
-        $view->setFormat('json');
         return $this->handleView($view);
     }
 
