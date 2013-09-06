@@ -3,7 +3,6 @@
 namespace Galaxy\GameBundle\Service\PointProcess;
 
 use Galaxy\GameBundle\Service\PointProcess\PointTypeProcess;
-use Galaxy\GameBundle\Service\DocumentsRemoteService;
 
 class GamePoints implements PointTypeProcess
 {
@@ -15,7 +14,7 @@ class GamePoints implements PointTypeProcess
         if($parameter < 0 && $fundsInfo->active < abs($parameter)){
             $cash = $fundsInfo->active;
         } else {
-            $cash = $parameter;
+            $cash = abs($parameter);
         }
         $data = array(
             'OA1' => $userId,
