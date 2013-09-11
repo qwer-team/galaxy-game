@@ -39,7 +39,7 @@ class JumpListener extends ContainerAware {
             $response = $this->spaceJump($jump);
             $pointTag = $response["type"]["tag"];
             $parameter = $response['subtype']['parameter'];
-            $this->logMessage($userId, $response["type"]["message1"]);
+            $this->logMessage($userId, $response["type"]["message1"], $jump);
 
             $this->updateBoughtPrizes($userInfo);
             $this->processMessage($userInfo);
@@ -57,7 +57,7 @@ class JumpListener extends ContainerAware {
         }
     }
 
-    private function logMessage($userId, $message) {
+    private function logMessage($userId, $message, Jump $jump) {
         if ($message == "") {
             return;
         }
@@ -65,6 +65,7 @@ class JumpListener extends ContainerAware {
         $logEntry = new UserLog();
         $logEntry->setUserId($userId);
         $logEntry->setText($message);
+        $logEntry->setNewCoordinates($jump);
 
         $em = $this->getEntityManager();
         $em->persist($logEntry);

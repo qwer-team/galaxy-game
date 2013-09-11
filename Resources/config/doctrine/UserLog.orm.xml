@@ -7,5 +7,8 @@
     <field name="userId" type="integer" column="user_id"/>
     <field name="text" type="string" column="text" length="255"/>
     <field name="date" type="datetime" column="date"/>
+    <field name="x" type="integer" column="x"/>
+    <field name="y" type="integer" column="y"/>
+    <field name="z" type="integer" column="z"/>
   </entity>
 </doctrine-mapping>

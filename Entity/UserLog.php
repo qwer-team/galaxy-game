@@ -2,17 +2,19 @@
 
 namespace Galaxy\GameBundle\Entity;
 
+use Galaxy\GameBundle\Entity\Jump;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserLog
  */
-class UserLog
-{
+class UserLog {
+
     /**
      * @var integer
      */
     private $userId;
+
     /**
      * @var integer
      */
@@ -22,15 +24,53 @@ class UserLog
      * @var string
      */
     private $text;
+    
+    /**
+     * @var integer
+     */
+    private $x;
+    
+    /**
+     * @var integer
+     */
+    private $y;
+    
+    /**
+     * @var integer
+     */
+    private $z;
 
     /**
      * @var \DateTime
      */
     private $date;
 
-    function __construct()
-    {
+    function __construct() {
         $this->date = new \DateTime();
+    }
+
+    public function getX() {
+        return $this->x;
+    }
+
+    public function setX($x) {
+        $this->x = $x;
+    }
+
+    public function getY() {
+        return $this->y;
+    }
+
+    public function setY($y) {
+        $this->y = $y;
+    }
+
+    public function getZ() {
+        return $this->z;
+    }
+
+    public function setZ($z) {
+        $this->z = $z;
     }
 
     /**
@@ -38,8 +78,7 @@ class UserLog
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -49,8 +88,7 @@ class UserLog
      * @param string $text
      * @return UserLog
      */
-    public function setText($text)
-    {
+    public function setText($text) {
         $this->text = $text;
 
         return $this;
@@ -61,8 +99,7 @@ class UserLog
      *
      * @return string 
      */
-    public function getText()
-    {
+    public function getText() {
         return $this->text;
     }
 
@@ -72,8 +109,7 @@ class UserLog
      * @param \DateTime $date
      * @return UserLog
      */
-    public function setDate($date)
-    {
+    public function setDate($date) {
         $this->date = $date;
 
         return $this;
@@ -84,27 +120,33 @@ class UserLog
      *
      * @return \DateTime 
      */
-    public function getDate()
-    {
+    public function getDate() {
         return $this->date;
     }
-    
-    public function getUserId()
-    {
+
+    public function getUserId() {
         return $this->userId;
     }
 
-    
     /**
      * Set userId
      *
      * @param integer $userId
      * @return UserLog
      */
-    public function setUserId($userId)
-    {
+    public function setUserId($userId) {
         $this->userId = $userId;
     }
-
+    
+    /**
+     * Set x
+     *
+     * @param integer $x, $y, $z
+     * @return UserInfo
+     */
+    public function setNewCoordinates(Jump $jump) {
+        list($this->x, $this->y, $this->z) = $jump->getCoordinates();
+        return $this;
+    }
 
 }
