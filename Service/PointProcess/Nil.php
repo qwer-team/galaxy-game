@@ -4,6 +4,7 @@ namespace Galaxy\GameBundle\Service\PointProcess;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Galaxy\GameBundle\Service\PointProcess\PointTypeProcess;
+use Galaxy\GameBundle\Entity\UserInfo;
 
 class Nil extends ContainerAware implements PointTypeProcess
 {

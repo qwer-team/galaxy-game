@@ -22,9 +22,7 @@ class ZeroPoint extends ContainerAware implements PointTypeProcess
             $userInfo->setFlipper($newFlipper);
         }
         $userInfo->getSuperJumps() ? $userInfo->setSuperJumps(0) : '';
-        $userInfo->getX() != 1 ? $userInfo->setX(1) : '';
-        $userInfo->getY() != 1 ? $userInfo->setY(1) : '';
-        $userInfo->getZ() != 1 ? $userInfo->setZ(1) : '';
+        $userInfo->getCountMessages()? $userInfo->setCountMessages(0) : '';
 
 
         $data = array(
