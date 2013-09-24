@@ -51,7 +51,6 @@ $backClient = $this->get('laelaps.gearman.client');
         }
         
         $view = $this->view($question);
-        $view->setFormat('json');
         return $this->handleView($view);
     }
 
