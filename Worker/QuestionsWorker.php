@@ -24,9 +24,9 @@ class QuestionsWorker extends Worker
 
         $diff = $expire->diff(new \DateTime);
         $seconds = $diff->s + $diff->i * 60;
-        $output->writeln("слип {$seconds}");
+        $output->writeln("sleep {$seconds}");
         if ($seconds > 0) {
-            sleep(1);
+            sleep($seconds);
         }
         
         try {
