@@ -24,11 +24,11 @@ class QuestionsWorker extends Worker
 
         $diff = $expire->diff(new \DateTime);
         $seconds = $diff->s + $diff->i * 60;
-        
+        $output->writeln("слип {$seconds}");
         if ($seconds > 0) {
-            sleep($seconds);
+            sleep(1);
         }
-
+        
         try {
             $service  = $this->getQuestionService();
             $question = $this->getQuestion($data['id']);

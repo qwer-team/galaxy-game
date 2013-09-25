@@ -17,7 +17,7 @@ class QuestionController extends FOSRestController
 
         $openedQuestion = null;
         $candidateQuestion = null;
-$backClient = $this->get('laelaps.gearman.client');
+        
         foreach ($userInfo->getQuestions() as $userQuestion) {
             if (!$candidateQuestion && $userQuestion->getStatus() == 2) {
                 $candidateQuestion = $userQuestion;
@@ -39,7 +39,7 @@ $backClient = $this->get('laelaps.gearman.client');
                     "id" => $question->getId(),
                     "expires" => $expires,
                 );
-                
+                $backClient = $this->get('laelaps.gearman.client');
                 $backClient->doBackground('close_question', serialize($data));
 
                 $question->setStatus(3);
