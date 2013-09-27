@@ -11,5 +11,6 @@
         <parameter key="documentsurl">gala.my/documents</parameter>
         <parameter key="usersurl">gala.user.my</parameter>
         <parameter key="space.url">http://localhost:8080/gala</parameter>
+        <parameter key="info.url">gala.my/api</parameter>
     </parameters>
 </container>
