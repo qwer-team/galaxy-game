@@ -66,13 +66,25 @@ class QuestionController extends FOSRestController
             $variant = $answer + 1;
             if ($variant == $question->getRightAnswer()) {
                 $questionService->success($question);
-                $result = array("result" => "success");
+                $result = array(
+                    "result" => "success",
+                    "userAnswer" => $variant,
+                    "question" => $question, 
+                    );
             } else {
                 $questionService->fail($question);
-                $result = array("result" => "fail");
+                $result = $result = array(
+                    "result" => "fail",
+                    "userAnswer" => $variant,
+                    "question" => $question, 
+                    );
             }
         } catch (\Exception $e) {
-            $result = array("result" => "exception {$e->getMessage()}");
+            $result = array("
+                result" => "exception {$e->getMessage()}",
+                "userAnswer" => 6,        
+                "question" => $question,        
+                );
         }
 
         $view = $this->view($result);
