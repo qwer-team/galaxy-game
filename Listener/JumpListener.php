@@ -46,6 +46,10 @@ class JumpListener extends ContainerAware {
             $this->processQuestions($userInfo);
             $this->processTypeJump($pointTag, $parameter, $userId);
             $this->processPrizeJump($response, $jump, $userInfo);
+            if($this->processGetMessage($userInfo))
+            {
+                $response["message"] = $this->processGetMessage($userInfo);
+            }
             $userInfo->setNewCoordinates($jump);
             $userInfo->addTotalJump();
             $em->flush();
@@ -110,6 +114,14 @@ class JumpListener extends ContainerAware {
             $userInfo->setMessage(null);
             $this->getEntityManager()->remove($message);
         }
+    }
+    
+    private function processGetMessage(UserInfo $userInfo) {
+        $message = $userInfo->getMessage();
+        if ($message) {
+            return $message->getText();
+        }
+        return false;
     }
 
     private function processQuestions(UserInfo $userInfo) {
