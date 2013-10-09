@@ -42,8 +42,14 @@ class Message implements PointTypeProcess
         );
         $messageData = $this->infoRemoteService->getMessage($data);
         $message = new MessageEntity();
-        if(isset($messageData->image)){
-            $message->setImage($messageData->image);
+        if(isset($messageData->img1)){
+            $message->setImage1($messageData->img1);
+        }
+        if(isset($messageData->img2)){
+            $message->setImage2($messageData->img2);
+        }
+        if(isset($messageData->img3)){
+            $message->setImage3($messageData->img3);
         }
         
         $message->setText($messageData->text);

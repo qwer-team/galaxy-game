@@ -4,7 +4,9 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
-        <field name="image" type="string" column="image" nullable="true" length="255"/>
+        <field name="image1" type="string" column="image1" nullable="true" length="255"/>
+        <field name="image2" type="string" column="image2" nullable="true" length="255"/>
+        <field name="image3" type="string" column="image3" nullable="true" length="255"/>
         <field name="text" type="text" column="text"/>
     </entity>
 </doctrine-mapping>
