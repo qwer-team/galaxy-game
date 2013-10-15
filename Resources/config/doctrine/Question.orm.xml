@@ -17,5 +17,8 @@
         <field name="answers" column="answers" type="array" />
         <field name="started" column="started" type="datetime" nullable="true"/>
         <field name="jumpsToQuestion" column="jumps_to_question" type="integer" />
+        <field name="image1" type="string" column="image1" nullable="true" length="255"/>
+        <field name="image2" type="string" column="image2" nullable="true" length="255"/>
+        <field name="image3" type="string" column="image3" nullable="true" length="255"/>
     </entity>
 </doctrine-mapping>

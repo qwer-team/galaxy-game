@@ -64,6 +64,9 @@ class Message implements PointTypeProcess
         $question->setJumpsToQuestion($messageData->jumpsToQuestion);
         $question->setRightAnswer($messageData->rightAnswer);
         $question->setSeconds($messageData->seconds);
+        $question->setImage1(isset($messageData->img1) ? $messageData->img1 : Null);
+        $question->setImage2(isset($messageData->img2) ? $messageData->img2 : Null);
+        $question->setImage3(isset($messageData->img3) ? $messageData->img3 : Null);
         $question->setUserInfo($userInfo);
 
         $answers = array();
@@ -74,6 +77,7 @@ class Message implements PointTypeProcess
         $this->em->persist($question);
         try {
             $this->em->flush();
+            return $messageData;
         } catch (\Exception $e) {
             $this->logger->err($e->getMessage());
             $this->logger->err(print_r( $message, true));

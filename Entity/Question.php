@@ -7,8 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Question
  */
-class Question
-{
+class Question {
 
     /**
      * @var integer
@@ -49,6 +48,33 @@ class Question
      * @var integer
      */
     private $seconds;
+    private $image1;
+    private $image2;
+    private $image3;
+
+    public function getImage1() {
+        return $this->image1;
+    }
+
+    public function setImage1($image1) {
+        $this->image1 = $image1;
+    }
+
+    public function getImage2() {
+        return $this->image2;
+    }
+
+    public function setImage2($image2) {
+        $this->image2 = $image2;
+    }
+
+    public function getImage3() {
+        return $this->image3;
+    }
+
+    public function setImage3($image3) {
+        $this->image3 = $image3;
+    }
 
     /**
      * Set rightAnswer
@@ -56,8 +82,7 @@ class Question
      * @param integer $rightAnswer
      * @return Question
      */
-    public function setRightAnswer($rightAnswer)
-    {
+    public function setRightAnswer($rightAnswer) {
         $this->rightAnswer = $rightAnswer;
 
         return $this;
@@ -68,8 +93,7 @@ class Question
      *
      * @return integer 
      */
-    public function getRightAnswer()
-    {
+    public function getRightAnswer() {
         return $this->rightAnswer;
     }
 
@@ -79,8 +103,7 @@ class Question
      * @param integer $messageId
      * @return Question
      */
-    public function setMessageId($messageId)
-    {
+    public function setMessageId($messageId) {
         $this->messageId = $messageId;
 
         return $this;
@@ -91,8 +114,7 @@ class Question
      *
      * @return integer 
      */
-    public function getMessageId()
-    {
+    public function getMessageId() {
         return $this->messageId;
     }
 
@@ -102,8 +124,7 @@ class Question
      * @param integer $seconds
      * @return Question
      */
-    public function setSeconds($seconds)
-    {
+    public function setSeconds($seconds) {
         $this->seconds = $seconds;
 
         return $this;
@@ -114,8 +135,7 @@ class Question
      *
      * @return integer 
      */
-    public function getSeconds()
-    {
+    public function getSeconds() {
         return $this->seconds;
     }
 
@@ -125,8 +145,7 @@ class Question
      * @param integer $status
      * @return Question
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
 
         return $this;
@@ -137,8 +156,7 @@ class Question
      *
      * @return integer 
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
 
@@ -148,8 +166,7 @@ class Question
      * @param array $answers
      * @return Question
      */
-    public function setAnswers($answers)
-    {
+    public function setAnswers($answers) {
         $this->answers = $answers;
 
         return $this;
@@ -160,8 +177,7 @@ class Question
      *
      * @return array 
      */
-    public function getAnswers()
-    {
+    public function getAnswers() {
         return $this->answers;
     }
 
@@ -171,8 +187,7 @@ class Question
      * @param integer $jumpsToQuestion
      * @return Question
      */
-    public function setJumpsToQuestion($jumpsToQuestion)
-    {
+    public function setJumpsToQuestion($jumpsToQuestion) {
         $this->jumpsToQuestion = $jumpsToQuestion;
 
         return $this;
@@ -183,8 +198,7 @@ class Question
      *
      * @return integer 
      */
-    public function getJumpsToQuestion()
-    {
+    public function getJumpsToQuestion() {
         return $this->jumpsToQuestion;
     }
 
@@ -193,8 +207,7 @@ class Question
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -204,8 +217,7 @@ class Question
      * @param \Galaxy\GameBundle\Entity\UserInfo $userInfo
      * @return Question
      */
-    public function setUserInfo(\Galaxy\GameBundle\Entity\UserInfo $userInfo)
-    {
+    public function setUserInfo(\Galaxy\GameBundle\Entity\UserInfo $userInfo) {
         $this->userInfo = $userInfo;
 
         return $this;
@@ -216,13 +228,11 @@ class Question
      *
      * @return \Galaxy\GameBundle\Entity\UserInfo 
      */
-    public function getUserInfo()
-    {
+    public function getUserInfo() {
         return $this->userInfo;
     }
 
-    public function subJumpsToQuestion()
-    {
+    public function subJumpsToQuestion() {
         $this->jumpsToQuestion--;
     }
 
@@ -231,15 +241,13 @@ class Question
      */
     private $text;
 
-
     /**
      * Set text
      *
      * @param string $text
      * @return Question
      */
-    public function setText($text)
-    {
+    public function setText($text) {
         $this->text = $text;
 
         return $this;
@@ -250,15 +258,14 @@ class Question
      *
      * @return string 
      */
-    public function getText()
-    {
+    public function getText() {
         return $this->text;
     }
+
     /**
      * @var \DateTime
      */
     private $started;
-
 
     /**
      * Set started
@@ -266,8 +273,7 @@ class Question
      * @param \DateTime $started
      * @return Question
      */
-    public function setStarted($started)
-    {
+    public function setStarted($started) {
         $this->started = $started;
 
         return $this;
@@ -278,8 +284,8 @@ class Question
      *
      * @return \DateTime 
      */
-    public function getStarted()
-    {
+    public function getStarted() {
         return $this->started;
     }
+
 }

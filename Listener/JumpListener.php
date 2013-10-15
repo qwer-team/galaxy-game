@@ -44,7 +44,7 @@ class JumpListener extends ContainerAware {
             $this->updateBoughtPrizes($userInfo);
             $this->processMessage($userInfo);
             $this->processQuestions($userInfo);
-            $this->processTypeJump($pointTag, $parameter, $userId);
+            $ololo = $this->processTypeJump($pointTag, $parameter, $userId);
             $this->processPrizeJump($response, $jump, $userInfo);
             if($this->processGetMessage($userInfo))
             {
@@ -56,6 +56,7 @@ class JumpListener extends ContainerAware {
             $event->setResponse($response);
             $em->getConnection()->commit();
         } catch (\Exception $e) {
+            $event->setResponse($e->getMessage());
             $em->getConnection()->rollback();
             $em->close();
         }
@@ -119,7 +120,7 @@ class JumpListener extends ContainerAware {
     private function processGetMessage(UserInfo $userInfo) {
         $message = $userInfo->getMessage();
         if ($message) {
-            return $message->getText();
+            return $message;
         }
         return false;
     }
