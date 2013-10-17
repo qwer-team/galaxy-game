@@ -44,6 +44,19 @@ class DocumentsRemoteService extends ContainerAware
 
         return $response;
     }
+    public function transFunds($userId, $summa, $account)
+    {
+        $data = array(
+            'OA1' => $userId,
+            'summa1' => $summa,
+            'account' => $account
+        );
+        $url = $this->container->getParameter("documents.trans_funds.url");
+
+        $response = json_decode($this->makeRequest($url, $data));
+
+        return $response;
+    }
 
     private function makeRequest($url, $data = null)
     {

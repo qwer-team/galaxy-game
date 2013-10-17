@@ -4,24 +4,17 @@ namespace Galaxy\GameBundle\Service\PointProcess;
 
 use Galaxy\GameBundle\Service\PointProcess\PointTypeProcess;
 
-class GamePoints implements PointTypeProcess
+class PlusGamePoints implements PointTypeProcess
 {
     
     public function proceed($parameter, $userId)
     {
-        $documentsService = $this->container->get("document.remote_service");
-        $fundsInfo = $documentsService->getFunds($userId);
-        if($parameter < 0 && $fundsInfo->active < abs($parameter)){
-            $cash = $fundsInfo->active;
-        } else {
-            $cash = abs($parameter);
-        }
         $data = array(
             'OA1' => $userId,
-            'summa1' => $cash,
+            'summa1' => $parameter,
             'account' => 1
         );
-        $url = $parameter > 0 ? $this->container->getParameter("documents.trans_funds.url") : $this->container->getParameter("documents.debit_funds.url");
+        $url = $this->container->getParameter("documents.trans_funds.url");
 
         $response = json_decode($this->makeRequest($url, $data));
 
@@ -43,5 +36,5 @@ class GamePoints implements PointTypeProcess
 
         return $response;
     }
-
+    
 }
